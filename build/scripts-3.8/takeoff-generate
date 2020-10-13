@@ -1,0 +1,6 @@
+#!python
+
+from takeoff.generator import Generator
+
+g = Generator()
+g.print_instructions()
