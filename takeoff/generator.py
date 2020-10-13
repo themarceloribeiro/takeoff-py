@@ -22,4 +22,4 @@ class Generator:
     
     def get_generator(self):
         klass_name = ''.join(x for x in f"{self.generator_type.replace('_', ' ')} Generator".title() if not x.isspace())
-        return eval(f"{klass_name}(self.name)")
+        return eval(f"{klass_name}(self.name, self.options)")
