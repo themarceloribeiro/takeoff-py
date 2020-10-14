@@ -14,9 +14,9 @@ class WebProjectGenerator(GeneratorBase):
     
     def create_django_project(self):
         print('Creating Django Project')
-        os.system(f"cd dist/web && django-admin startproject {self.name}")
+        os.system(f"cd dist/{self.name}/web && django-admin startproject {self.name}")
 
     def create_structure_folders(self):
-        fullpath = f"dist/web/"
+        fullpath = f"dist/{self.name}/web/"
         print(f"    Creating Web Folder: {fullpath}")            
         os.system(f"mkdir -p {fullpath}")

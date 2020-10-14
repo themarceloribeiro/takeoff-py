@@ -1,0 +1,6 @@
+from django.db import models
+
+class {{ model_name.replace('_', ' ').title().replace(' ', '') }}(models.Model):
+{% for attribute in model_attributes %}
+    {{attribute['name']}} = models.{{ attribute['class'] }}({{ attribute['field_extra'] }})
+{% endfor %}

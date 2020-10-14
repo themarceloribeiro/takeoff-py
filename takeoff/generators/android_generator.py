@@ -30,7 +30,7 @@ class AndroidGenerator(GeneratorBase):
         print(f">>> Creating directory structure: {self.android_prefix}.{self.name}")
 
         for folder in self.main_project_folders():
-            fullpath = f"dist/android/{self.name.replace(' ', '').lower()}/{folder}"
+            fullpath = f"dist/{self.name.replace(' ', '').lower()}/android/{folder}"
             print(f"    Creating Android Folder: {fullpath}")
             os.system(f"mkdir -p {fullpath}")
 
@@ -39,7 +39,7 @@ class AndroidGenerator(GeneratorBase):
 
         main_files = self.main_project_files()
         for template_source in main_files:
-            destination = f"dist/android/{self.name.replace(' ', '').lower()}/{main_files[template_source]}"
+            destination = f"dist/{self.name.replace(' ', '').lower()}/android/{main_files[template_source]}"
             print(f"    Creating Android File: {destination}")
             self.render_template_file(template_source, destination)
 
