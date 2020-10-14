@@ -1,3 +1,3 @@
 class GeneratorBase:
     def setup(self):
-        print('Setting up')
+        print(f"Setting up: {type(self).__name__}")

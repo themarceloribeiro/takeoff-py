@@ -2,11 +2,13 @@ import os
 from jinja2 import Template
 from .generator_base import GeneratorBase
 
-class AndroidProjectGenerator(GeneratorBase):
+class AndroidGenerator(GeneratorBase):
 
-    def __init__(self, name, options):
+    def __init__(self, name, subtype, options):
         self.name = name
+        self.subtype = subtype
         self.options = options
+        self.android_prefix = ''
 
         for option in options:
             if 'android_prefix' in option:

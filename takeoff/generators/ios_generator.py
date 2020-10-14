@@ -1,8 +1,9 @@
 from .generator_base import GeneratorBase
 
-class IosProjectGenerator(GeneratorBase):
-    def __init__(self, name, options):
+class IosGenerator(GeneratorBase):
+    def __init__(self, name, subtype, options):
         self.name = name
+        self.subtype = subtype
 
     def run(self):
         self.setup()
