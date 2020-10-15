@@ -39,7 +39,7 @@ class WebModelGenerator(GeneratorBase):
 
     def write_model_file(self):
         template_path = '/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates/web/model.template'
-        destination_folder = f"dist/{self.name}/web/{self.name}/models"
+        destination_folder = f"dist/{self.name}/web/{self.name}/main/models"
         os.system(f"mkdir -p {destination_folder}")
         destination = f"{destination_folder}/{self.model_name}.py"
 
@@ -47,6 +47,6 @@ class WebModelGenerator(GeneratorBase):
             template_contents = f.read()
 
         template = Template(template_contents)
-        contents = template.render(model_name=self.model_name, model_attributes=self.model_attributes)
+        contents = template.render(generator=self)
         with open(destination, 'w') as f:
             f.write(contents)
