@@ -5,17 +5,20 @@ from pathlib import Path
 
 class WebModelGenerator(GeneratorBase):
     def __init__(self, name, options):
-        self.name = name
-        self.options = options
+        super().__init__(name, options)
         self.model_name = ''
         self.model_attributes = []
 
-    def project_folder(self):
-        return f"dist/{self.name}/web/{self.name}"
+    def project_type(self):
+        return 'web'
+
+    def model_class_name(self):
+        return self.model_name.replace('_', ' ').title().replace(' ', '')
 
     def run(self):
         self.model_name = self.options.pop(0)
         print(f"Running Web Model Generator: {self.name} : {self.model_name}")
+
         for attribute in self.options:
             parts = attribute.split(':')
             self.model_attributes.append({
@@ -28,6 +31,7 @@ class WebModelGenerator(GeneratorBase):
         self.write_model_file()
         self.update_models_file()        
         self.generate_migration()
+        self.register_admin()
     
     def attribute_class(self, type):
         switcher = { 
@@ -63,7 +67,7 @@ class WebModelGenerator(GeneratorBase):
         current_file = f"{self.project_folder()}/main/models/__init__.py"
 
         lines = list(open(current_file, 'r'))
-        lines.append(f"from .{self.model_name} import {self.model_name.replace('_', ' ').title().replace(' ', '')}\n")
+        lines.append(f"from .{self.model_name} import {self.model_class_name()}\n")
         
         with open(current_file, 'w') as file:
             file.writelines(lines)
@@ -73,3 +77,29 @@ class WebModelGenerator(GeneratorBase):
     
     def generate_migration(self):
         os.system(f"cd {self.project_folder()} && python3 manage.py makemigrations")
+    
+    def register_admin(self):
+        current_file = f"{self.project_folder()}/main/admin.py"
+        import_line = f"from .models.customer import {self.model_class_name()}\n"
+        register_line = f"admin.site.register({self.model_class_name()})\n"
+        
+        last_import_line_index = 0
+        index = 0
+
+        lines = list(open(current_file, 'r'))
+
+        if import_line in lines or register_line in lines:
+            return
+
+        for line in lines:
+            if 'import' not in line:
+                last_import_line_index = index
+            index += 1
+        
+        lines.insert(last_import_line_index, import_line)
+        lines.append("\n")
+        lines.append("\n")        
+        lines.append(register_line)
+
+        with open(current_file, 'w') as file:
+            file.writelines(lines)        

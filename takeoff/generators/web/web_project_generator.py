@@ -4,7 +4,10 @@ from ..generator_base import GeneratorBase
 
 class WebProjectGenerator(GeneratorBase):
     def __init__(self, name, options):
-        self.name = name
+        super().__init__(name, options)
+
+    def project_type(self):
+        return 'web'
 
     def run(self):
         self.setup()
@@ -12,7 +15,12 @@ class WebProjectGenerator(GeneratorBase):
         self.create_structure_folders()
         self.create_django_project()
         self.prepare_settings()
+        self.migrate()
+        self.create_admin()
     
+    def migrate(self):
+        os.system(f"cd {self.project_folder()} && python3 manage.py migrate")
+
     def create_django_project(self):
         print('Creating Django Project')
         os.system(f"cd dist/{self.name}/web && django-admin startproject {self.name}")
@@ -45,3 +53,6 @@ class WebProjectGenerator(GeneratorBase):
                 finish = i
 
         return finish
+    
+    def create_admin(self):
+        os.system(f"cd {self.project_folder()} && python3 manage.py createsuperuser")
