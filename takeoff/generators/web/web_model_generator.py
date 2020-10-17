@@ -27,6 +27,20 @@ class WebModelGenerator(GeneratorBase):
                 'class': self.attribute_class(parts[1]),
                 'field_extra': self.attribute_field_extra(parts[1])
             })
+        
+        self.model_attributes.append({
+            'name': 'created_at',
+            'type': 'datetime',
+            'class': 'DateTimeField',
+            'field_extra': 'auto_now_add=True'
+        })
+
+        self.model_attributes.append({
+            'name': 'updated_at',
+            'type': 'datetime',
+            'class': 'DateTimeField',
+            'field_extra': 'auto_now_add=True'
+        })        
 
         self.write_model_file()
         self.update_models_file()        
