@@ -1,6 +1,7 @@
 import os
 from jinja2 import Template
 from ..generator_base import GeneratorBase
+from pathlib import Path
 
 class WebProjectGenerator(GeneratorBase):
     def __init__(self, name, options):
@@ -15,6 +16,7 @@ class WebProjectGenerator(GeneratorBase):
         self.create_structure_folders()
         self.create_django_project()
         self.prepare_settings()
+        self.prepare_urls()
         self.migrate()
         self.create_admin()
     
@@ -39,7 +41,7 @@ class WebProjectGenerator(GeneratorBase):
         
         with open(settings_file, 'w') as file:
             file.writelines(lines)
-    
+
     def installed_apps_last_line(self, lines):
         i = 0
         start = 0
@@ -48,6 +50,48 @@ class WebProjectGenerator(GeneratorBase):
         for line in lines:
             i += 1
             if 'INSTALLED_APPS' in line:
+                start = i
+            if start > 0 and finish == 0 and ']' in line:
+                finish = i
+
+        return finish
+
+    def generate_main_urls(self):
+        template_path = '/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates/web/urls.template'
+        destination = f"dist/{self.name}/web/{self.name}/main/urls.py"
+
+        with open(template_path) as f:
+            template_contents = f.read()
+
+        template = Template(template_contents)
+        contents = template.render(generator=self, app_name='main')
+        
+        with open(destination, 'w') as f:
+            f.write(contents)
+
+    def prepare_urls(self):
+        self.generate_main_urls()
+        urls_file = f"dist/{self.name}/web/{self.name}/{self.name}/urls.py"
+        lines = list(open(urls_file, 'r'))
+
+        for index, line in enumerate(lines):
+            if line == "from django.urls import path\n":
+                lines[index] = line.replace('path', 'path, include')
+
+        last_line = self.urls_last_line(lines)
+        lines.insert(last_line - 1, f"    path('', include('main.urls'))\n")
+
+        with open(urls_file, 'w') as file:
+            file.writelines(lines)
+
+    def urls_last_line(self, lines):
+        i = 0
+        start = 0
+        finish = 0
+
+        for line in lines:
+            i += 1
+            if 'urlpatterns' in line:
                 start = i
             if start > 0 and finish == 0 and ']' in line:
                 finish = i
