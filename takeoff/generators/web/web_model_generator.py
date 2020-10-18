@@ -8,6 +8,7 @@ class WebModelGenerator(GeneratorBase):
         super().__init__(name, options)
         self.model_name = ''
         self.model_attributes = []
+        self.associations = []
 
     def project_type(self):
         return 'web'
@@ -21,12 +22,19 @@ class WebModelGenerator(GeneratorBase):
 
         for attribute in self.options:
             parts = attribute.split(':')
+
             self.model_attributes.append({
                 'name': parts[0], 
                 'type': parts[1], 
                 'class': self.attribute_class(parts[1]),
-                'field_extra': self.attribute_field_extra(parts[1])
+                'field_extra': self.attribute_field_extra(parts[1], parts[0].replace('_', ' ').title().replace(' ', ''))
             })
+
+            if parts[1] == 'belongs_to':
+                self.associations.append({
+                    'name': parts[0], 
+                    'class_name': parts[0].replace('_', ' ').title().replace(' ', '')
+                })
         
         self.model_attributes.append({
             'name': 'created_at',
@@ -50,14 +58,16 @@ class WebModelGenerator(GeneratorBase):
     def attribute_class(self, type):
         switcher = { 
             'string': 'CharField', 
-            'integer': 'IntegerField'
+            'integer': 'IntegerField',
+            'belongs_to': 'ForeignKey'
         }   
         return switcher.get(type, 'CharField')
     
-    def attribute_field_extra(self, type):
+    def attribute_field_extra(self, type, association_class = ''):
         switcher = { 
             'string': "default='', max_length=250", 
-            'integer': 'default=0'
+            'integer': 'default=0',
+            'belongs_to': f"{association_class}, on_delete=models.CASCADE"
         }   
         return switcher.get(type, "default='', max_length=250")
 
@@ -94,7 +104,7 @@ class WebModelGenerator(GeneratorBase):
     
     def register_admin(self):
         current_file = f"{self.project_folder()}/main/admin.py"
-        import_line = f"from .models.customer import {self.model_class_name()}\n"
+        import_line = f"from .models.{self.model_name} import {self.model_class_name()}\n"
         register_line = f"admin.site.register({self.model_class_name()})\n"
         
         last_import_line_index = 0

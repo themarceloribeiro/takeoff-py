@@ -1,4 +1,7 @@
 from django.db import models
+{% for association in generator.associations -%}
+from .{{ association['name'] }} import {{ association['class_name'] }}
+{% endfor %}
 
 class {{ generator.model_name.replace('_', ' ').title().replace(' ', '') }}(models.Model):
     {% for attribute in generator.model_attributes %}
