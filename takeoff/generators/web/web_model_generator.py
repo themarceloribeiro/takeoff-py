@@ -22,6 +22,8 @@ class WebModelGenerator(GeneratorBase):
 
         for attribute in self.options:
             parts = attribute.split(':')
+            if len(parts) == 1:
+                parts.append('string')
 
             self.model_attributes.append({
                 'name': parts[0], 
@@ -58,8 +60,11 @@ class WebModelGenerator(GeneratorBase):
     def attribute_class(self, type):
         switcher = { 
             'string': 'CharField', 
+            'text': 'TextField', 
             'integer': 'IntegerField',
-            'belongs_to': 'ForeignKey'
+            'float': 'FloatField',
+            'boolean': 'BooleanField',            
+            'belongs_to': 'ForeignKey',
         }   
         return switcher.get(type, 'CharField')
     
@@ -67,12 +72,15 @@ class WebModelGenerator(GeneratorBase):
         switcher = { 
             'string': "default='', max_length=250", 
             'integer': 'default=0',
+            'float': 'default=0.0',
+            'text': "default=''",
+            'boolean': 'default=False',
             'belongs_to': f"{association_class}, on_delete=models.CASCADE"
         }   
         return switcher.get(type, "default='', max_length=250")
 
     def write_model_file(self):
-        template_path = '/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates/web/model.template'
+        template_path = f"{self.templates_path}/web/model.template"
         destination_folder = f"{self.project_folder()}/main/models"
         os.system(f"mkdir -p {destination_folder}")
         Path(f"{destination_folder}/__init__.py").touch()
@@ -100,7 +108,7 @@ class WebModelGenerator(GeneratorBase):
         return len(lines)
     
     def generate_migration(self):
-        os.system(f"cd {self.project_folder()} && python3 manage.py makemigrations")
+        os.system(f"cd {self.project_folder()} && {self.python} manage.py makemigrations")
     
     def register_admin(self):
         current_file = f"{self.project_folder()}/main/admin.py"
@@ -108,21 +116,16 @@ class WebModelGenerator(GeneratorBase):
         register_line = f"admin.site.register({self.model_class_name()})\n"
         
         last_import_line_index = 0
-        index = 0
-
         lines = list(open(current_file, 'r'))
 
         if import_line in lines or register_line in lines:
             return
 
-        for line in lines:
+        for index, line in enumerate(lines):
             if 'import' not in line:
                 last_import_line_index = index
-            index += 1
         
         lines.insert(last_import_line_index, import_line)
-        lines.append("\n")
-        lines.append("\n")        
         lines.append(register_line)
 
         with open(current_file, 'w') as file:

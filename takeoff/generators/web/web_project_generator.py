@@ -11,8 +11,8 @@ class WebProjectGenerator(GeneratorBase):
         return 'web'
 
     def run(self):
+        print(f"Running Web Project Generator: {self.name}")        
         self.setup()
-        print(f"Running Web Project Generator: {self.name}")
         self.create_structure_folders()
         self.create_django_project()
         self.prepare_settings()
@@ -21,16 +21,16 @@ class WebProjectGenerator(GeneratorBase):
         self.create_admin()
     
     def migrate(self):
-        os.system(f"cd {self.project_folder()} && python3 manage.py migrate")
+        os.system(f"cd {self.project_folder()} && {self.python} manage.py migrate")
 
     def create_django_project(self):
         print('Creating Django Project')
         os.system(f"cd dist/{self.name}/web && django-admin startproject {self.name}")
-        os.system(f"cd dist/{self.name}/web/{self.name} && python3 manage.py startapp main")
+        os.system(f"cd dist/{self.name}/web/{self.name} && {self.python} manage.py startapp main")
 
     def create_structure_folders(self):
         fullpath = f"dist/{self.name}/web/"
-        print(f"    Creating Web Folder: {fullpath}")            
+        print(f"    Creating Web Folder: {fullpath}")
         os.system(f"mkdir -p {fullpath}")
     
     def prepare_settings(self):
@@ -43,21 +43,19 @@ class WebProjectGenerator(GeneratorBase):
             file.writelines(lines)
 
     def installed_apps_last_line(self, lines):
-        i = 0
-        start = 0
+        started = False
         finish = 0
 
-        for line in lines:
-            i += 1
+        for index, line in enumerate(lines):
             if 'INSTALLED_APPS' in line:
-                start = i
-            if start > 0 and finish == 0 and ']' in line:
-                finish = i
+                started = True
+            if started > 0 and finish == 0 and ']' in line:
+                finish = index
 
         return finish
 
     def generate_main_urls(self):
-        template_path = '/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates/web/urls.template'
+        template_path = f"{self.templates_path}/web/urls.template"
         destination = f"dist/{self.name}/web/{self.name}/main/urls.py"
 
         with open(template_path) as f:
@@ -79,24 +77,22 @@ class WebProjectGenerator(GeneratorBase):
                 lines[index] = line.replace('path', 'path, include')
 
         last_line = self.urls_last_line(lines)
-        lines.insert(last_line - 1, f"    path('', include('main.urls'))\n")
+        lines.insert(last_line - 1, f"    path('', include('main.urls')),\n")
 
         with open(urls_file, 'w') as file:
             file.writelines(lines)
 
     def urls_last_line(self, lines):
-        i = 0
-        start = 0
+        started = False
         finish = 0
 
-        for line in lines:
-            i += 1
+        for index, line in enumerate(lines):
             if 'urlpatterns' in line:
-                start = i
-            if start > 0 and finish == 0 and ']' in line:
-                finish = i
+                started = True
+            if started and finish == 0 and ']' in line:
+                finish = index
 
         return finish
-    
+
     def create_admin(self):
-        os.system(f"cd {self.project_folder()} && python3 manage.py createsuperuser")
+        os.system(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")
