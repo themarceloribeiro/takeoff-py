@@ -76,8 +76,11 @@ class WebProjectGenerator(GeneratorBase):
             if line == "from django.urls import path\n":
                 lines[index] = line.replace('path', 'path, include')
 
-        last_line = self.urls_last_line(lines)
-        lines.insert(last_line - 1, f"    path('', include('main.urls')),\n")
+        line = f"    path('', include('main.urls')),\n"
+        
+        if line not in lines:
+            last_line = self.urls_last_line(lines)
+            lines.insert(last_line - 1, line)
 
         with open(urls_file, 'w') as file:
             file.writelines(lines)

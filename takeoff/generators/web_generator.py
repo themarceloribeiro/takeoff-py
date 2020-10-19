@@ -3,6 +3,7 @@ from jinja2 import Template
 from .generator_base import GeneratorBase
 from .web.web_project_generator import WebProjectGenerator
 from .web.web_model_generator import WebModelGenerator
+from .web.web_resource_generator import WebResourceGenerator
 
 class WebGenerator(GeneratorBase):
     def __init__(self, name, subtype, options):

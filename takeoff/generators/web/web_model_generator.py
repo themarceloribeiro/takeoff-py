@@ -14,7 +14,7 @@ class WebModelGenerator(GeneratorBase):
         return 'web'
 
     def model_class_name(self):
-        return self.model_name.replace('_', ' ').title().replace(' ', '')
+        return self.camelize(self.model_name)
 
     def run(self):
         self.model_name = self.options.pop(0)
@@ -29,13 +29,13 @@ class WebModelGenerator(GeneratorBase):
                 'name': parts[0], 
                 'type': parts[1], 
                 'class': self.attribute_class(parts[1]),
-                'field_extra': self.attribute_field_extra(parts[1], parts[0].replace('_', ' ').title().replace(' ', ''))
+                'field_extra': self.attribute_field_extra(parts[1], self.camelize(parts[0]))
             })
 
             if parts[1] == 'belongs_to':
                 self.associations.append({
                     'name': parts[0], 
-                    'class_name': parts[0].replace('_', ' ').title().replace(' ', '')
+                    'class_name': self.camelize(parts[0])
                 })
         
         self.model_attributes.append({

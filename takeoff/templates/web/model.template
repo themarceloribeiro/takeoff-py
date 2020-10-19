@@ -3,7 +3,7 @@ from django.db import models
 from .{{ association['name'] }} import {{ association['class_name'] }}
 {% endfor %}
 
-class {{ generator.model_name.replace('_', ' ').title().replace(' ', '') }}(models.Model):
+class {{ generator.camelize(generator.model_name) }}(models.Model):
     {% for attribute in generator.model_attributes %}
         {{- attribute['name']}} = models.{{ attribute['class'] }}({{ attribute['field_extra'] }})
     {% endfor %}

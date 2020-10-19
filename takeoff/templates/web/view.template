@@ -1,0 +1,9 @@
+from django.shortcuts import render
+from ..models.{{ generator.model_name }} import {{ generator.model_class_name() }}
+
+def index(request):
+    {{ generator.pluralize(generator.model_name) }} = {{ generator.model_class_name() }}.objects.all()
+    context = {
+        '{{ generator.pluralize(generator.model_name) }}': {{ generator.pluralize(generator.model_name) }}
+    }
+    return render(request, "{{ generator.pluralize(generator.model_name) }}/index.html", context)
