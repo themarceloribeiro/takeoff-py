@@ -1,0 +1,8 @@
+from django import forms
+from ..models.{{ generator.model_name }} import {{ generator.model_class_name() }}
+
+class {{ generator.model_class_name() }}Form(forms.ModelForm):
+    class Meta:
+        model = {{ generator.model_class_name() }}
+        fields = {{ generator.fields_list() }}
+        labels = {{ generator.labels_list() }}

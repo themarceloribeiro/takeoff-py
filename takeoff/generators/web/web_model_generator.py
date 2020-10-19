@@ -65,7 +65,7 @@ class WebModelGenerator(GeneratorBase):
             'float': 'FloatField',
             'boolean': 'BooleanField',            
             'belongs_to': 'ForeignKey',
-        }   
+        }
         return switcher.get(type, 'CharField')
     
     def attribute_field_extra(self, type, association_class = ''):

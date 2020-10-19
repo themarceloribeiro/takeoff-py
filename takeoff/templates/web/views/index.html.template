@@ -1,4 +1,5 @@
 <h1>{{ generator.pluralize(generator.titleize(generator.model_name)) }} List</h1>
+<a href="{{ "{% url 'main:" }}new_{{ generator.model_name }}'  {{ '%}' }}">New {{ generator.model_name }}</a>
 <ul>
     {{ '{% for' }} {{ generator.model_name }} in {{ generator.pluralize(generator.model_name) }} {{ '%}' }}
         <li><a href="{{ "{% url 'main:" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ '%}' }}">{{ '{{' }} {{ generator.model_name }} {{ '}}' }}</a></li>
