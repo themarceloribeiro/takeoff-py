@@ -1,7 +1,7 @@
 <h1>{{ generator.pluralize(generator.titleize(generator.model_name)) }} List</h1>
 <ul>
     {{ '{% for' }} {{ generator.model_name }} in {{ generator.pluralize(generator.model_name) }} {{ '%}' }}
-        <li>{{ '{{' }} {{ generator.model_name }} {{ '}}' }}</li>
+        <li><a href="{{ "{% url 'main:" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ '%}' }}">{{ '{{' }} {{ generator.model_name }} {{ '}}' }}</a></li>
     {{ '{% empty %}' }}
         <li>No {{ generator.pluralize(generator.model_name) }} have been added yet.</li>
     {{ '{% endfor %}' }}

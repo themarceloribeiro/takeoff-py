@@ -35,7 +35,7 @@ class WebResourceGenerator(GeneratorBase):
 
         template = Template(template_contents)
         contents = template.render(generator=self)
-        
+
         with open(destination, 'w') as f:
             f.write(contents)
 
@@ -44,7 +44,7 @@ class WebResourceGenerator(GeneratorBase):
 
         lines = list(open(current_file, 'r'))
         line = f"from .{self.pluralize(self.model_name)} import *\n"
-        
+
         if line not in lines:
             lines.append(line)
         
@@ -52,10 +52,15 @@ class WebResourceGenerator(GeneratorBase):
             file.writelines(lines)
     
     def write_views(self):
-        template_path = f"{self.templates_path}/web/views/index.html.template"
+        views = ['index', 'show']
+        for view in views:
+            self.render_view_template(view)
+    
+    def render_view_template(self, view):
+        template_path = f"{self.templates_path}/web/views/{view}.html.template"
         destination_folder = f"{self.project_folder()}/main/templates/{self.pluralize(self.model_name)}"
         os.system(f"mkdir -p {destination_folder}")
-        destination = f"{destination_folder}/index.html"
+        destination = f"{destination_folder}/{view}.html"
 
         with open(template_path) as f:
             template_contents = f.read()
@@ -74,11 +79,18 @@ class WebResourceGenerator(GeneratorBase):
             if line == "from django.urls import path\n":
                 lines[index] = line.replace('path', 'path, include')
 
-        line = f"    path('{self.pluralize(self.model_name)}/', views.{self.pluralize(self.model_name)}.index, name='{self.pluralize(self.model_name)}'),\n"
+        new_lines = [
+            f"path('{self.pluralize(self.model_name)}/', views.{self.pluralize(self.model_name)}.index, name='{self.pluralize(self.model_name)}')",
+            f"path('{self.pluralize(self.model_name)}/<int:{self.model_name}_id>', views.{self.pluralize(self.model_name)}.show, name='{self.model_name}')",
+        ]
+    
+        last_line = self.urls_last_line(lines)
 
-        if line not in lines:
-            last_line = self.urls_last_line(lines)
-            lines.insert(last_line, line)
+        for new_line in new_lines:
+            new_line = f"    {new_line},\n"
+            if new_line not in lines:
+                lines.insert(last_line, new_line)
+                last_line += 1
 
         with open(urls_file, 'w') as file:
             file.writelines(lines)

@@ -1,0 +1,1 @@
+<h1>{{ generator.titleize(generator.model_name) }}: {{ '{{' }} {{ generator.model_name }} {{ '}}' }}</h1>
