@@ -1,1 +1,11 @@
 <h1>{{ generator.titleize(generator.model_name) }}: {{ '{{' }} {{ generator.model_name }} {{ '}}' }}</h1>
+<p>
+    <a href="{{ "{% url 'main:edit_" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ '%}' }}">Edit</a>
+</p>
+{% for attribute in generator.model_attributes %}
+<p>
+    <strong>{{ generator.titleize(attribute['attribute_name']) }}:</strong>
+    {{ '{{' }}{{ generator.model_name }}.{{ attribute['attribute_name'] }}{{ '}}' }}
+</p>
+{% endfor %}
+<a href="{{ "{% url 'main:" }}{{ generator.pluralize(generator.model_name) }}' {{ '%}' }}">All {{ generator.pluralize(generator.titleize(generator.model_name)) }}</a>

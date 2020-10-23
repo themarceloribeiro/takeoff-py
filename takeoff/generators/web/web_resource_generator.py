@@ -101,7 +101,7 @@ class WebResourceGenerator(GeneratorBase):
             file.writelines(lines)
     
     def write_views(self):
-        views = ['index', 'show', 'new']
+        views = ['index', 'show', 'new', 'edit']
         for view in views:
             self.render_view_template(view)
     
@@ -132,6 +132,8 @@ class WebResourceGenerator(GeneratorBase):
             f"path('{self.pluralize(self.model_name)}/', views.{self.pluralize(self.model_name)}.index, name='{self.pluralize(self.model_name)}')",
             f"path('{self.pluralize(self.model_name)}/new', views.{self.pluralize(self.model_name)}.new, name='new_{self.model_name}')",
             f"path('{self.pluralize(self.model_name)}/<int:{self.model_name}_id>', views.{self.pluralize(self.model_name)}.show, name='{self.model_name}')",
+            f"path('{self.pluralize(self.model_name)}/<int:{self.model_name}_id>/edit', views.{self.pluralize(self.model_name)}.edit, name='edit_{self.model_name}')",
+            f"path('{self.pluralize(self.model_name)}/<int:{self.model_name}_id>/delete', views.{self.pluralize(self.model_name)}.delete, name='delete_{self.model_name}')",
         ]
     
         last_line = self.urls_last_line(lines)
@@ -166,4 +168,3 @@ class WebResourceGenerator(GeneratorBase):
         fields = list(map(lambda x: f"'{x['attribute_name']}': '{self.titleize(x['attribute_name'])}'", self.writeable_attributes()))
         fields = ", ".join(fields)
         return '{' + f"{fields}" + '}'
-

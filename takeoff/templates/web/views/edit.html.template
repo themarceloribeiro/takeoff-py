@@ -1,0 +1,7 @@
+<h1>Edit {{ generator.titleize(generator.model_name) }}</h1>
+
+<form action="{{ "{% url 'main:edit_" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ " %}" }}" method='post'>
+    {{ '{% csrf_token %}' }}
+    {{ '{{ form.as_p }}' }}
+    <button name="submit">Save</button>
+</form>

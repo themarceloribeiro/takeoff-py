@@ -30,3 +30,23 @@ def new(request):
 
     context = {'form': form}
     return render(request, '{{ generator.pluralize(generator.model_name) }}/new.html', context)
+
+def edit(request, {{generator.model_name}}_id):
+    {{ generator.model_name }} = {{ generator.model_class_name() }}.objects.get(id={{ generator.model_name }}_id)
+
+    if request.method != 'POST':
+        form = {{ generator.model_class_name() }}Form(instance={{ generator.model_name }})
+    else:
+        form = {{ generator.model_class_name() }}Form(instance={{ generator.model_name }}, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('main:{{ generator.model_name }}', {{ generator.model_name }}_id={{ generator.model_name }}.id)
+
+    context = {'{{ generator.model_name }}': {{ generator.model_name }}, 'form': form}
+    return render(request, '{{ generator.pluralize(generator.model_name) }}/edit.html', context)
+
+def delete(request, {{generator.model_name}}_id):
+    {{ generator.model_name }} = {{ generator.model_class_name() }}.objects.get(id={{ generator.model_name }}_id)
+    {{ generator.model_name }}.delete()
+    
+    return redirect('main:{{ generator.pluralize(generator.model_name) }}')
