@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from ..models.{{ generator.model_name }} import {{ generator.model_class_name() }}
 from ..forms.{{ generator.model_name }} import {{ generator.model_class_name() }}Form
@@ -26,6 +27,7 @@ def new(request):
         form = {{ generator.model_class_name() }}Form(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.info(request, '{{ generator.titleize(generator.model_name) }} created.')
             return redirect('main:{{ generator.pluralize(generator.model_name) }}')
 
     context = {'form': form}
@@ -40,6 +42,7 @@ def edit(request, {{generator.model_name}}_id):
         form = {{ generator.model_class_name() }}Form(instance={{ generator.model_name }}, data=request.POST)
         if form.is_valid():
             form.save()
+            messages.info(request, '{{ generator.titleize(generator.model_name) }} updated.')
             return redirect('main:{{ generator.model_name }}', {{ generator.model_name }}_id={{ generator.model_name }}.id)
 
     context = {'{{ generator.model_name }}': {{ generator.model_name }}, 'form': form}
@@ -48,5 +51,6 @@ def edit(request, {{generator.model_name}}_id):
 def delete(request, {{generator.model_name}}_id):
     {{ generator.model_name }} = {{ generator.model_class_name() }}.objects.get(id={{ generator.model_name }}_id)
     {{ generator.model_name }}.delete()
+    messages.info(request, '{{ generator.titleize(generator.model_name) }} deleted.')
     
     return redirect('main:{{ generator.pluralize(generator.model_name) }}')

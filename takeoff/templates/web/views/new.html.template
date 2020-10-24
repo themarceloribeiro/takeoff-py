@@ -1,3 +1,6 @@
+{{ "{% extends 'layouts/application.html' %}" }}
+
+{{ '{% block content %}' }}
 <h1>New {{ generator.titleize(generator.model_name) }}</h1>
 
 <form action="{{ "{% url 'main:new_" }}{{ generator.model_name }}{{ "' %}" }}" method='post'>
@@ -5,3 +8,4 @@
     {{ '{{ form.as_p }}' }}
     <button name="submit">Add {{ generator.titleize(generator.model_name) }}</button>
 </form>
+{{ '{% endblock content %}' }}

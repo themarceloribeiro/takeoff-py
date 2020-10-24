@@ -19,12 +19,31 @@ class WebResourceGenerator(GeneratorBase):
         self.model_name = self.options.pop(0)
         print(f"Running Web Resource Generator: {self.name} : {self.model_name}")
 
+        self.generate_layout()
         self.load_model_attributes()
         self.write_view_file()
         self.update_views_file()
         self.write_form_file()
         self.write_views()
         self.prepare_urls()
+
+    def generate_layout(self):
+        layouts = f"{self.project_folder()}/main/templates/layouts"
+        os.system(f"mkdir -p {layouts}")
+        destination = f"{layouts}/application.html"
+
+        if os.path.exists(destination):
+            return
+        
+        template_path = f"{self.templates_path}/web/views/layout.html.template"
+        with open(template_path) as f:
+            template_contents = f.read()
+
+        template = Template(template_contents)
+        contents = template.render(generator=self)
+        with open(destination, 'w') as f:
+            f.write(contents)
+
 
     def writeable_attributes(self):
         atts = []
