@@ -5,6 +5,10 @@
     <p>
         <a href="{{ "{% url 'main:edit_" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ '%}' }}">Edit</a>
     </p>
+    <p>
+        <strong>Id:</strong>
+        {{ '{{' }} {{ generator.model_name }}.id {{ '}}' }}
+    </p>
     {% for attribute in generator.model_attributes -%}
     <p>
         <strong>{{ generator.titleize(attribute['attribute_name']) }}:</strong>
