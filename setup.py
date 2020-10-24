@@ -20,7 +20,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'jinja2'
+        'jinja2',
+        'django-bootstrap4',
     ],
     python_requires='>=3.6',
 )

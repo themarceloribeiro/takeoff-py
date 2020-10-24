@@ -13,6 +13,7 @@ class WebProjectGenerator(GeneratorBase):
     def run(self):
         print(f"Running Web Project Generator: {self.name}")        
         self.setup()
+        self.install_required_libraries()
         self.create_structure_folders()
         self.create_django_project()
         self.prepare_settings()
@@ -22,6 +23,11 @@ class WebProjectGenerator(GeneratorBase):
     
     def migrate(self):
         os.system(f"cd {self.project_folder()} && {self.python} manage.py migrate")
+
+    def install_required_libraries(self):
+        libs = ['django-bootstrap4']
+        for lib in libs:
+            os.system(f"{self.pip} install {lib}")
 
     def create_django_project(self):
         print('Creating Django Project')
@@ -38,6 +44,7 @@ class WebProjectGenerator(GeneratorBase):
         lines = list(open(settings_file, 'r'))
         last_line = self.installed_apps_last_line(lines)
         lines.insert(last_line - 1, "    'main',\n")
+        lines.insert(last_line - 1, "    'bootstrap4',\n")
         
         with open(settings_file, 'w') as file:
             file.writelines(lines)

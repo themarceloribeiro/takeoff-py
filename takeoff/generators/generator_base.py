@@ -5,6 +5,7 @@ class GeneratorBase:
         self.name = name
         self.options = options
         self.python = 'python3'
+        self.pip = 'pip3'
         self.templates_path = '/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates'
 
     def setup(self):
