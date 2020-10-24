@@ -1,12 +1,16 @@
 import re
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class GeneratorBase:
+
     def __init__(self, name, options):
         self.name = name
         self.options = options
         self.python = 'python3'
         self.pip = 'pip3'
-        self.templates_path = '/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates'
+        self.templates_path = os.path.join(BASE_DIR, 'templates')
 
     def setup(self):
         print(f"Setting up: {type(self).__name__}")

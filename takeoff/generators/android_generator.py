@@ -44,7 +44,7 @@ class AndroidGenerator(GeneratorBase):
             self.render_template_file(template_source, destination)
 
     def render_template_file(self, template_source, destination):
-        template_path = f"/Users/marcelo/work/takeoff/python/takeoff/takeoff/templates/android/{template_source}.template"
+        template_path = os.path.join(BASE_DIR, f"templates/android/{template_source}.template")
         
         with open(template_path) as f:
             template_contents = f.read()

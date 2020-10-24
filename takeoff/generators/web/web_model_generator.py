@@ -75,7 +75,7 @@ class WebModelGenerator(GeneratorBase):
             'float': 'default=0.0',
             'text': "default=''",
             'boolean': 'default=False',
-            'belongs_to': f"{association_class}, on_delete=models.CASCADE"
+            'belongs_to': f"{association_class}, on_delete=models.CASCADE,  null=True"
         }   
         return switcher.get(type, "default='', max_length=250")
 

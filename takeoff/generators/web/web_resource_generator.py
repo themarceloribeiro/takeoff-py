@@ -65,7 +65,8 @@ class WebResourceGenerator(GeneratorBase):
             'models.DateTimeField',
             'models.IntegerField',
             'models.BooleanField',
-            'models.FloatField'
+            'models.FloatField',
+            'models.ForeignKey',
         ]
 
         for line in lines:
