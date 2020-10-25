@@ -10,11 +10,8 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">Resources</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <!-- Resources -->
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-          <!-- /Resources -->
+          <!-- StartResources -->
+          <!-- EndResources -->
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/">Home</a>
 				</div>
