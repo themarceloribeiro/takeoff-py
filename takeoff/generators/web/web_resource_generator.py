@@ -20,6 +20,7 @@ class WebResourceGenerator(GeneratorBase):
         print(f"Running Web Resource Generator: {self.name} : {self.model_name}")
 
         self.generate_layout()
+        self.generate_nav()
         self.load_model_attributes()
         self.write_view_file()
         self.update_views_file()
@@ -27,15 +28,10 @@ class WebResourceGenerator(GeneratorBase):
         self.write_views()
         self.prepare_urls()
 
-    def generate_layout(self):
-        layouts = f"{self.project_folder()}/main/templates/layouts"
-        os.system(f"mkdir -p {layouts}")
-        destination = f"{layouts}/application.html"
-
+    def render_template(self, template_path, destination):
         if os.path.exists(destination):
             return
         
-        template_path = f"{self.templates_path}/web/views/layout.html.template"
         with open(template_path) as f:
             template_contents = f.read()
 
@@ -44,6 +40,19 @@ class WebResourceGenerator(GeneratorBase):
         with open(destination, 'w') as f:
             f.write(contents)
 
+    def generate_layout(self):
+        layouts = f"{self.project_folder()}/main/templates/layouts"
+        os.system(f"mkdir -p {layouts}")
+        destination = f"{layouts}/application.html"
+        template_path = f"{self.templates_path}/web/views/layout.html.template"
+        self.render_template(template_path, destination)
+
+    def generate_nav(self):
+        shared = f"{self.project_folder()}/main/templates/shared"
+        os.system(f"mkdir -p {shared}")
+        destination = f"{shared}/_nav.html"
+        template_path = f"{self.templates_path}/web/views/nav.html.template"
+        self.render_template(template_path, destination)
 
     def writeable_attributes(self):
         atts = []
@@ -130,15 +139,7 @@ class WebResourceGenerator(GeneratorBase):
         destination_folder = f"{self.project_folder()}/main/templates/{self.pluralize(self.model_name)}"
         os.system(f"mkdir -p {destination_folder}")
         destination = f"{destination_folder}/{view}.html"
-
-        with open(template_path) as f:
-            template_contents = f.read()
-
-        template = Template(template_contents)
-        contents = template.render(generator=self)
-        
-        with open(destination, 'w') as f:
-            f.write(contents)
+        self.render_template(template_path, destination)
 
     def prepare_urls(self):
         urls_file = f"dist/{self.name}/web/{self.name}/main/urls.py"

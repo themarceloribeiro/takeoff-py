@@ -1,11 +1,14 @@
 {{ "{% extends 'layouts/application.html' %}" }}
+{{ '{% load bootstrap4 %}' }}
 
 {{ '{% block content %}' }}
     <h1>New {{ generator.titleize(generator.model_name) }}</h1>
 
     <form action="{{ "{% url 'main:new_" }}{{ generator.model_name }}{{ "' %}" }}" method='post'>
         {{ '{% csrf_token %}' }}
-        {{ '{{ form.as_p }}' }}
-        <button name="submit">Add {{ generator.titleize(generator.model_name) }}</button>
+        {{ '{% bootstrap_form form %}' }}
+        {{ '{% buttons %}' }}
+            <button name="submit" class="btn btn-primary">Add {{ generator.titleize(generator.model_name) }}</button>
+        {{ '{% endbuttons %}' }}
     </form>
 {{ '{% endblock content %}' }}
