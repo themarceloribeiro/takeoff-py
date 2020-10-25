@@ -37,26 +37,10 @@ class WebProjectGenerator(WebBaseGenerator):
         os.system(f"mkdir -p {fullpath}")
     
     def prepare_settings(self):
-        settings_file = f"dist/{self.name}/web/{self.name}/{self.name}/settings.py"
-        lines = list(open(settings_file, 'r'))
-        last_line = self.installed_apps_last_line(lines)
-        lines.insert(last_line - 1, "    'main',\n")
-        lines.insert(last_line - 1, "    'bootstrap4',\n")
-        
-        with open(settings_file, 'w') as file:
-            file.writelines(lines)
-
-    def installed_apps_last_line(self, lines):
-        started = False
-        finish = 0
-
-        for index, line in enumerate(lines):
-            if 'INSTALLED_APPS' in line:
-                started = True
-            if started > 0 and finish == 0 and ']' in line:
-                finish = index
-
-        return finish
+        self.add_app('main')
+        self.add_app('bootstrap4')
+        self.add_setting('LOGIN_REDIRECT_URL', '/')
+        self.add_setting('LOGOUT_REDIRECT_URL', '/')
 
     def generate_main_urls(self):
         template_path = f"{self.templates_path}/web/urls.template"
@@ -73,33 +57,7 @@ class WebProjectGenerator(WebBaseGenerator):
 
     def prepare_urls(self):
         self.generate_main_urls()
-        urls_file = f"dist/{self.name}/web/{self.name}/{self.name}/urls.py"
-        lines = list(open(urls_file, 'r'))
-
-        for index, line in enumerate(lines):
-            if line == "from django.urls import path\n":
-                lines[index] = line.replace('path', 'path, include')
-
-        line = f"    path('', include('main.urls')),\n"
-        
-        if line not in lines:
-            last_line = self.urls_last_line(lines)
-            lines.insert(last_line - 1, line)
-
-        with open(urls_file, 'w') as file:
-            file.writelines(lines)
-
-    def urls_last_line(self, lines):
-        started = False
-        finish = 0
-
-        for index, line in enumerate(lines):
-            if 'urlpatterns' in line:
-                started = True
-            if started and finish == 0 and ']' in line:
-                finish = index
-
-        return finish
+        self.add_app_url_pattern('main', '')
 
     def create_admin(self):
         os.system(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")

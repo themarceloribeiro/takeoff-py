@@ -1,0 +1,15 @@
+<ul class="navbar-nav ml-md-auto">
+  {{ '{% if user.is_authenticated %}' }}
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown">Hello, Marcelo</a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="#">Settings</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ "{% url 'users:logout' %}" }}">Log out</a>
+      </div>
+    </li>
+  {{ '{% else %}' }}
+    <li class="nav-item"><a class="nav-link" href="{{ "{% url 'users:login' %}" }}">Log In</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ "{% url 'users:register' %}" }}">Register</a></li>
+  {{ '{% endif %}' }}
+</ul>
