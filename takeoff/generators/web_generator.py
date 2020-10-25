@@ -4,6 +4,7 @@ from .generator_base import GeneratorBase
 from .web.web_project_generator import WebProjectGenerator
 from .web.web_model_generator import WebModelGenerator
 from .web.web_resource_generator import WebResourceGenerator
+from .web.web_authentication_generator import WebAuthenticationGenerator
 
 class WebGenerator(GeneratorBase):
     def __init__(self, name, subtype, options):

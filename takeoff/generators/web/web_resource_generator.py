@@ -1,16 +1,13 @@
 import os
 from jinja2 import Template
-from ..generator_base import GeneratorBase
+from .web_base_generator import WebBaseGenerator
 from pathlib import Path
 
-class WebResourceGenerator(GeneratorBase):
+class WebResourceGenerator(WebBaseGenerator):
     def __init__(self, name, options):
         super().__init__(name, options)
         self.model_name = ''
         self.model_attributes = []
-
-    def project_type(self):
-        return 'web'
 
     def model_class_name(self):
         return self.camelize(self.model_name)
