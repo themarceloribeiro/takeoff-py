@@ -3,9 +3,6 @@
 {{ '{% block content %}' }}
     <h1>{{ generator.titleize(generator.model_name) }}: {{ '{{' }} {{ generator.model_name }} {{ '}}' }}</h1>
     <p>
-        <a href="{{ "{% url 'main:edit_" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ '%}' }}">Edit</a>
-    </p>
-    <p>
         <strong>Id:</strong>
         {{ '{{' }} {{ generator.model_name }}.id {{ '}}' }}
     </p>
@@ -15,5 +12,8 @@
         {{ '{{' }}{{ generator.model_name }}.{{ attribute['attribute_name'] }}{{ '}}' }}
     </p>
     {% endfor %}
-    <a href="{{ "{% url 'main:" }}{{ generator.pluralize(generator.model_name) }}' {{ '%}' }}">All {{ generator.pluralize(generator.titleize(generator.model_name)) }}</a>
+    <p>
+        <a href="{{ "{% url 'main:edit_" }}{{ generator.model_name }}' {{ generator.model_name }}.id {{ '%}' }}">Edit</a> | 
+        <a href="{{ "{% url 'main:" }}{{ generator.pluralize(generator.model_name) }}' {{ '%}' }}">All {{ generator.pluralize(generator.titleize(generator.model_name)) }}</a>
+    </p>
 {{ '{% endblock content %}' }}

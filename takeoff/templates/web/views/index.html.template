@@ -2,9 +2,11 @@
 
 {{ '{% block content %}' }}
     <h1>{{ generator.pluralize(generator.titleize(generator.model_name)) }} List</h1>
-    <a href="{{ "{% url 'main:" }}new_{{ generator.model_name }}'  {{ '%}' }}">New {{ generator.model_name }}</a>
+    <p>
+        <a class="btn btn-success" href="{{ "{% url 'main:" }}new_{{ generator.model_name }}'  {{ '%}' }}">New {{ generator.model_name }}</a>
+    </p>
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
