@@ -1,9 +1,5 @@
 from jinja2 import Template
-from .generators.android_generator import AndroidGenerator
-from .generators.ios_generator import IosGenerator
-from .generators.api_generator import ApiGenerator
-from .generators.react_generator import ReactGenerator
-from .generators.web_generator import WebGenerator
+from .generators import *
 
 class Generator:
     def __init__(self, arguments):

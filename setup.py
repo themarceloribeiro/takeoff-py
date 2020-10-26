@@ -22,6 +22,9 @@ setuptools.setup(
     install_requires=[
         'jinja2',
         'django-bootstrap4',
+        'nose',
     ],
+    test_suite='nose.collector',
+    tests_require=['nose'],    
     python_requires='>=3.6',
 )
