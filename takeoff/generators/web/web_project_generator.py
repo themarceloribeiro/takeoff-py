@@ -27,10 +27,10 @@ class WebProjectGenerator(WebBaseGenerator):
             self.system_call(f"{self.pip} install {lib}")
 
     def start_django_project(self):
-        self.system_call(f"cd dist/{self.name}/web && django-admin startproject {self.name}")
+        self.system_call(f"cd {self.base_dist_folder()}/{self.name}/web && django-admin startproject {self.name}")
 
     def start_main_app(self):
-        self.system_call(f"cd dist/{self.name}/web/{self.name} && {self.python} manage.py startapp main")
+        self.system_call(f"cd {self.base_dist_folder()}/{self.name}/web/{self.name} && {self.python} manage.py startapp main")
 
     def create_django_project(self):
         print('Creating Django Project')
@@ -38,7 +38,7 @@ class WebProjectGenerator(WebBaseGenerator):
         self.start_main_app()
 
     def create_structure_folders(self):
-        fullpath = f"dist/{self.name}/web/"
+        fullpath = f"{self.base_dist_folder()}/{self.name}/web/"
         print(f"    Creating Web Folder: {fullpath}")
         self.system_call(f"mkdir -p {fullpath}")
 
@@ -53,7 +53,7 @@ class WebProjectGenerator(WebBaseGenerator):
 
     def generate_main_urls(self):
         template_path = f"{self.templates_path}/web/urls.template"
-        destination = f"dist/{self.name}/web/{self.name}/main/urls.py"
+        destination = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/main/urls.py"
 
         with open(template_path) as f:
             template_contents = f.read()

@@ -14,12 +14,15 @@ class GeneratorBase:
 
     def setup(self):
         print(f"Setting up: {type(self).__name__}")
+    
+    def base_dist_folder(self):
+        return 'dist'        
 
     def project_type(self):
         return 'undefined'
 
     def project_folder(self):
-        return f"dist/{self.name}/{self.project_type()}/{self.name}"
+        return f"{self.base_dist_folder()}/{self.name}/{self.project_type()}/{self.name}"
     
     def titleize(self, string):
         return string.replace('_', ' ').title()

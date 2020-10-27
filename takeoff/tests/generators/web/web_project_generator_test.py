@@ -9,17 +9,18 @@ class WebProjectGeneratorTest(TestCase):
         self.g = WebProjectGenerator('blog', [])
         self.real_system_call = self.g.system_call
         self.g.system_call = MagicMock()
+        self.g.base_dist_folder = MagicMock(return_value='test_dist')
 
     def test_project_folder(self):
-        self.assertEqual(self.g.project_folder(), 'dist/blog/web/blog')
+        self.assertEqual(self.g.project_folder(), 'test_dist/blog/web/blog')
     
     def test_create_structure_folders(self):
         self.g.create_structure_folders()
-        self.g.system_call.assert_called_with('mkdir -p dist/blog/web/')
+        self.g.system_call.assert_called_with('mkdir -p test_dist/blog/web/')
 
     def test_migrate_call(self):
         self.g.migrate()
-        self.g.system_call.assert_called_with('cd dist/blog/web/blog && python3 manage.py migrate')
+        self.g.system_call.assert_called_with('cd test_dist/blog/web/blog && python3 manage.py migrate')
 
     def test_install_libraries_call(self):
         self.g.install_required_libraries()
@@ -27,17 +28,18 @@ class WebProjectGeneratorTest(TestCase):
     
     def test_start_django_project(self):
         self.g.start_django_project()
-        self.g.system_call.assert_called_with('cd dist/blog/web && django-admin startproject blog')
+        self.g.system_call.assert_called_with('cd test_dist/blog/web && django-admin startproject blog')
 
     def test_start_main_app(self):
         self.g.start_main_app()
-        self.g.system_call.assert_called_with('cd dist/blog/web/blog && python3 manage.py startapp main')
+        self.g.system_call.assert_called_with('cd test_dist/blog/web/blog && python3 manage.py startapp main')
     
     def test_create_admin(self):
         self.g.create_admin()
-        self.g.system_call.assert_called_with('cd dist/blog/web/blog && python3 manage.py createsuperuser')
+        self.g.system_call.assert_called_with('cd test_dist/blog/web/blog && python3 manage.py createsuperuser')
     
     def test_prepare_settings(self):
         self.g.system_call = self.real_system_call
+        self.g.create_structure_folders()
         self.g.create_django_project()
         self.g.prepare_settings()
