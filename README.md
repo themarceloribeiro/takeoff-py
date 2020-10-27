@@ -1,3 +1,5 @@
+![TakeOff](logo-small.png)
+
 # Takeoff
 A Python toolset to launch full stack, web and mobile projects
 
