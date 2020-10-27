@@ -36,3 +36,9 @@ takeoff-generate web:resource blog category
 ```
 takeoff-generate web:resource blog post
 ```
+
+User authentication is also supported by a generator
+
+```
+takeoff-generate web:authentication blog
+```
