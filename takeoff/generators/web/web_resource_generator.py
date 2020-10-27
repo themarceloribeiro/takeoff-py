@@ -130,7 +130,9 @@ class WebResourceGenerator(WebBaseGenerator):
 
     def prepare_urls(self):
         urls_file = f"dist/{self.name}/web/{self.name}/main/urls.py"
-        lines = list(open(urls_file, 'r'))
+        file = open(urls_file, 'r')
+        lines = list(file)
+        file.close()
 
         for index, line in enumerate(lines):
             if line == "from django.urls import path\n":

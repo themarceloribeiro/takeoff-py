@@ -27,7 +27,9 @@ class WebBaseGenerator(GeneratorBase):
 
     def add_main_url_pattern(self, pattern, view_name, path_name):
         urls_file = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/main/urls.py"
-        lines = list(open(urls_file, 'r'))
+        file = open(urls_file, 'r')
+        lines = list(file)
+        file.close()
 
         for index, line in enumerate(lines):
             if line == "from django.urls import path\n":
@@ -121,7 +123,9 @@ class WebBaseGenerator(GeneratorBase):
 
     def add_setting(self, setting, value):
         settings_file = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/{self.name}/settings.py"
-        lines = list(open(settings_file, 'r'))
+        file = open(settings_file, 'r')
+        lines = list(file)
+        file.close()
         last_line = len(lines)
         setting_line = f"{setting}='{value}'\n"
 
@@ -134,7 +138,9 @@ class WebBaseGenerator(GeneratorBase):
 
     def add_app(self, app_name):
         settings_file = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/{self.name}/settings.py"
-        lines = list(open(settings_file, 'r'))
+        file = open(settings_file, 'r')
+        lines = list(file)
+        file.close()
         last_line = self.installed_apps_last_line(lines)
         lines.insert(last_line, f"    '{app_name}',\n")
 
@@ -143,7 +149,9 @@ class WebBaseGenerator(GeneratorBase):
     
     def add_app_url_pattern(self, app_name, pattern):
         urls_file = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/{self.name}/urls.py"
-        lines = list(open(urls_file, 'r'))
+        file = open(urls_file, 'r')
+        lines = list(file)
+        file.close()
 
         for index, line in enumerate(lines):
             if line == "from django.urls import path\n":
