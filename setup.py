@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="takeoff-py",
     scripts=['takeoff-generate'],
-    version="0.0.4",
+    version="0.0.5",
     author="Marcelo Ribeiro",
     author_email="themarceloribeiro@gmail.com",
     description="A Python toolset to launch full stack, mobile projects",
