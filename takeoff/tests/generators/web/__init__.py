@@ -1,0 +1,1 @@
+from .web_project_generator_test import *

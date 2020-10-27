@@ -19,23 +19,32 @@ class WebProjectGenerator(WebBaseGenerator):
         self.create_admin()
     
     def migrate(self):
-        os.system(f"cd {self.project_folder()} && {self.python} manage.py migrate")
+        self.system_call(f"cd {self.project_folder()} && {self.python} manage.py migrate")
 
     def install_required_libraries(self):
         libs = ['django-bootstrap4']
         for lib in libs:
-            os.system(f"{self.pip} install {lib}")
+            self.system_call(f"{self.pip} install {lib}")
+
+    def start_django_project(self):
+        self.system_call(f"cd dist/{self.name}/web && django-admin startproject {self.name}")
+
+    def start_main_app(self):
+        self.system_call(f"cd dist/{self.name}/web/{self.name} && {self.python} manage.py startapp main")
 
     def create_django_project(self):
         print('Creating Django Project')
-        os.system(f"cd dist/{self.name}/web && django-admin startproject {self.name}")
-        os.system(f"cd dist/{self.name}/web/{self.name} && {self.python} manage.py startapp main")
+        self.start_django_project()
+        self.start_main_app()
 
     def create_structure_folders(self):
         fullpath = f"dist/{self.name}/web/"
         print(f"    Creating Web Folder: {fullpath}")
-        os.system(f"mkdir -p {fullpath}")
-    
+        self.system_call(f"mkdir -p {fullpath}")
+
+    def create_admin(self):
+        self.system_call(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")
+
     def prepare_settings(self):
         self.add_app('main')
         self.add_app('bootstrap4')
@@ -58,6 +67,3 @@ class WebProjectGenerator(WebBaseGenerator):
     def prepare_urls(self):
         self.generate_main_urls()
         self.add_app_url_pattern('main', '')
-
-    def create_admin(self):
-        os.system(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")

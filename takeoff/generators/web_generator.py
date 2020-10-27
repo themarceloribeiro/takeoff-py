@@ -9,8 +9,10 @@ class WebGenerator(GeneratorBase):
         self.subtype = subtype
         self.options = options
 
+    def generator(self):
+        klass_name = f"Web{self.subtype.replace('_', ' ').title()} Generator".replace(' ', '')
+        return eval(f"{klass_name}(self.name, self.options)")
+
     def run(self):
         self.setup()
-        klass_name = f"Web{self.subtype.replace('_', ' ').title()} Generator".replace(' ', '')
-        generator = eval(f"{klass_name}(self.name, self.options)")
-        generator.run()
+        self.generator().run()

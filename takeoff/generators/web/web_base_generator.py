@@ -10,6 +10,9 @@ class WebBaseGenerator(GeneratorBase):
     def project_type(self):
         return 'web'
 
+    def system_call(command):
+        os.system(command)
+
     def render_template(self, template_path, destination, overwrite=False):
         if os.path.exists(destination) and not overwrite:
             return
