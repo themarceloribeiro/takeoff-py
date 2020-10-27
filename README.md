@@ -1,7 +1,7 @@
 # Takeoff
 A Python toolset to launch full stack, web and mobile projects
 
-[![<ORG_NAME>](https://circleci.com/github/themarceloribeiro/takeoff-py.svg?style=svg)](<LINK>)
+[![CircleCI](https://circleci.com/gh/themarceloribeiro/takeoff-py.svg?style=svg)](https://app.circleci.com/pipelines/github/themarceloribeiro/takeoff-py)
 
 ```
 pip install takeoff-py
