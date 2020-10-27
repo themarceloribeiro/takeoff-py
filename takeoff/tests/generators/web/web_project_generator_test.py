@@ -12,7 +12,7 @@ class WebProjectGeneratorTest(TestCase):
         self.real_system_call = self.g.system_call
         self.g.system_call = MagicMock()
         self.g.base_dist_folder = MagicMock(return_value='test_dist')
-    
+
     def setup_project(self):
         self.g.system_call = self.real_system_call
         self.g.create_structure_folders()
@@ -49,7 +49,7 @@ class WebProjectGeneratorTest(TestCase):
     
     def test_start_django_project(self):
         self.g.start_django_project()
-        self.g.system_call.assert_called_with('cd test_dist/blog/web && django-admin startproject blog')
+        self.g.system_call.assert_called_with(f"cd test_dist/blog/web && {self.g.django_admin} startproject blog")
 
     def test_start_main_app(self):
         self.g.start_main_app()

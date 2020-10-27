@@ -12,6 +12,9 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
+          command: ls /home/circleci/.local/lib/python3.9/site-packages/django/bin/django-admin.py
+          name: Django2
+      - run:
           command: python setup.py test
           name: Test
 

@@ -5,10 +5,11 @@ from pathlib import Path
 
 class WebProjectGenerator(WebBaseGenerator):
     def __init__(self, name, options):
+        self.django_admin = os.getenv('PYTHON_DJANGO_ADMIN', 'django-admin')
         super().__init__(name, options)
 
     def run(self):
-        print(f"Running Web Project Generator: {self.name}")        
+        print(f"Running Web Project Generator: {self.name}")
         self.setup()
         self.install_required_libraries()
         self.create_structure_folders()
@@ -22,12 +23,12 @@ class WebProjectGenerator(WebBaseGenerator):
         self.system_call(f"cd {self.project_folder()} && {self.python} manage.py migrate")
 
     def install_required_libraries(self):
-        libs = ['django-bootstrap4']
+        libs = ['django', 'django-bootstrap4']
         for lib in libs:
             self.system_call(f"{self.pip} install {lib}")
 
     def start_django_project(self):
-        self.system_call(f"cd {self.base_dist_folder()}/{self.name}/web && django-admin startproject {self.name}")
+        self.system_call(f"cd {self.base_dist_folder()}/{self.name}/web && {self.django_admin} startproject {self.name}")
 
     def start_main_app(self):
         self.system_call(f"cd {self.base_dist_folder()}/{self.name}/web/{self.name} && {self.python} manage.py startapp main")
