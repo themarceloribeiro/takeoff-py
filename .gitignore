@@ -3,3 +3,4 @@ test_dist/
 takeoff_py.egg-info
 **/__pycache__
 deploy
+build/lib
