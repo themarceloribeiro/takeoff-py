@@ -6,7 +6,7 @@ from pathlib import Path
 class WebModelGenerator(WebBaseGenerator):
     def __init__(self, name, options):
         super().__init__(name, options)
-        self.model_name = ''
+        self.model_name = self.options.pop(0)
         self.model_attributes = []
         self.associations = []
 
@@ -14,9 +14,14 @@ class WebModelGenerator(WebBaseGenerator):
         return self.camelize(self.model_name)
 
     def run(self):
-        self.model_name = self.options.pop(0)
         print(f"Running Web Model Generator: {self.name} : {self.model_name}")
+        self.load_attributes()
+        self.write_model_file()
+        self.update_models_file()        
+        self.generate_migration()
+        self.register_admin()
 
+    def load_attributes(self):
         for attribute in self.options:
             parts = attribute.split(':')
             if len(parts) == 1:
@@ -47,13 +52,8 @@ class WebModelGenerator(WebBaseGenerator):
             'type': 'datetime',
             'class': 'DateTimeField',
             'field_extra': 'auto_now_add=True'
-        })        
+        })
 
-        self.write_model_file()
-        self.update_models_file()        
-        self.generate_migration()
-        self.register_admin()
-    
     def attribute_class(self, type):
         switcher = { 
             'string': 'CharField', 
