@@ -4,3 +4,4 @@ takeoff_py.egg-info
 **/__pycache__
 deploy
 build/lib
+.DS_Store

@@ -3,12 +3,24 @@ from jinja2 import Template
 from ..generator_base import GeneratorBase
 from pathlib import Path
 
-class WebBaseGenerator(GeneratorBase):
+class AndroidBaseGenerator(GeneratorBase):
     def __init__(self, name, options):
         super().__init__(name, options)
 
     def project_type(self):
-        return 'web'
+        return 'android'
+
+    def render_template(self, template_path, destination, overwrite=False):
+        if os.path.exists(destination) and not overwrite:
+            return
+        
+        with open(template_path) as f:
+            template_contents = f.read()
+
+        template = Template(template_contents)
+        contents = template.render(generator=self)
+        with open(destination, 'w') as f:
+            f.write(contents)
 
     def add_main_url_pattern(self, pattern, view_name, path_name):
         urls_file = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/main/urls.py"

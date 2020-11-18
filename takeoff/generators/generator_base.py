@@ -1,5 +1,6 @@
 import re
 import os
+from jinja2 import Template
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,3 +38,18 @@ class GeneratorBase:
             return string
 
         return f"{string}s"
+
+    def system_call(self, command):
+        os.system(command)
+
+    def render_template(self, template_path, destination, overwrite=False):
+        if os.path.exists(destination) and not overwrite:
+            return
+        
+        with open(template_path) as f:
+            template_contents = f.read()
+
+        template = Template(template_contents)
+        contents = template.render(generator=self)
+        with open(destination, 'w') as f:
+            f.write(contents)
