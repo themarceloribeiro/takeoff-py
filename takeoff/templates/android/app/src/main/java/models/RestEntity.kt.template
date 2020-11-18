@@ -1,0 +1,10 @@
+package {{ generator.android_prefix }}.models
+
+import org.json.JSONObject
+
+interface RestEntity {
+    fun getRemoteId(): Int
+    fun resourceName(): String
+    fun resourcePlural(): String
+    fun toJson(): JSONObject
+}

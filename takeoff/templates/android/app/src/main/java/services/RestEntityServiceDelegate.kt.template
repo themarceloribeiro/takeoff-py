@@ -1,0 +1,14 @@
+package {{ generator.android_prefix }}.services
+
+import org.json.JSONObject
+
+interface RestEntityServiceDelegate {
+    fun displayError(message: String)
+    fun displayNotice(message: String)
+    fun entityFound(response: JSONObject)
+    fun entityCreated(response: JSONObject)
+    fun entityUpdated(response: JSONObject)
+    fun entityDeleted(response: JSONObject)
+    fun allFetched(response: JSONObject)
+    fun searchResults(response: JSONObject)
+}

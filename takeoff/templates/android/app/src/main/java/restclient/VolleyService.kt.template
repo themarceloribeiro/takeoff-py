@@ -1,0 +1,194 @@
+package {{ generator.android_prefix }}.restclient
+
+import android.util.Log
+import com.android.volley.*
+import com.android.volley.toolbox.HttpHeaderParser
+import com.android.volley.toolbox.JsonObjectRequest
+import org.json.JSONObject
+import java.nio.charset.Charset
+
+class VolleyService : ServiceInterface {
+
+    val TAG = VolleyService::class.java.simpleName
+    val MY_SOCKET_TIMEOUT_MS = 10000
+
+    companion object {
+        val HOST_PATH = "127.0.0.1:8000"
+        val HOST_PROTOCOL = "http://"
+        val basePath = "${HOST_PROTOCOL}${HOST_PATH}"
+        val cablePath = "wss://${HOST_PATH}/cable"
+        val stripeKey = "STRIPE_KEY"
+        val TERMS_URL = "${HOST_PROTOCOL}${HOST_PATH}/terms"
+    }
+
+    var apiToken = "API_TOKEN"
+
+    override var userToken:String? = null
+
+    fun signingToken(): String {
+        return if (userToken != null) {
+            userToken!!
+        } else {
+            apiToken
+        }
+    }
+
+    override fun get(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        var sb = StringBuilder()
+        var keys = params.keys()
+        sb.append("?")
+
+        while (keys.hasNext()) {
+            var paramKey = keys.next()
+            sb.append(paramKey)
+            sb.append("=")
+            sb.append(params.get(paramKey))
+            sb.append("&")
+        }
+
+        Log.i("URL", basePath + path + sb.toString())
+
+        val jsonObjReq = object : JsonObjectRequest(Method.GET, basePath + path + sb.toString(), params,
+            Response.Listener<JSONObject> { response ->
+                Log.i("RESPONSE", response.toString())
+                completionHandler(response, null)
+            },
+            Response.ErrorListener { error ->
+                Log.i("ERROR", error.toString())
+                completionHandler(null, error)
+            }) {
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", signingToken())
+                return headers
+            }
+        }
+
+        jsonObjReq.setRetryPolicy(DefaultRetryPolicy(
+            MY_SOCKET_TIMEOUT_MS,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+
+        {{ generator.camelize(generator.name) }}ApiConnector.instance?.addToRequestQueue(jsonObjReq, TAG)
+    }
+
+    fun getGeneric(url: String, params: JSONObject, authorizationToken: String?, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        val jsonObjReq = object : JsonObjectRequest(Method.GET, url, params,
+            Response.Listener<JSONObject> { response ->
+                completionHandler(response, null)
+            },
+            Response.ErrorListener { error ->
+                completionHandler(null, error)
+            }) {
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Content-Type", "application/json")
+                if(authorizationToken != null) {
+                    headers.put("Authorization", "Bearer " + authorizationToken)
+                }
+                return headers
+            }
+        }
+
+        jsonObjReq.setRetryPolicy(DefaultRetryPolicy(
+            MY_SOCKET_TIMEOUT_MS,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+
+        {{ generator.camelize(generator.name) }}ApiConnector.instance?.addToRequestQueue(jsonObjReq, TAG)
+    }
+
+    override fun post(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        val jsonObjReq = object : JsonObjectRequest(Method.POST, basePath + path, params,
+            Response.Listener<JSONObject> { response ->
+                completionHandler(response, null)
+            },
+            Response.ErrorListener { error ->
+                completionHandler(null, error)
+            }) {
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", signingToken())
+                return headers
+            }
+        }
+        jsonObjReq.setRetryPolicy(DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+        {{ generator.camelize(generator.name) }}ApiConnector.instance?.addToRequestQueue(jsonObjReq, TAG)
+    }
+
+    override fun patch(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        val jsonObjReq = object : JsonObjectRequest(Method.PATCH, basePath + path, params,
+            Response.Listener<JSONObject> { response ->
+                completionHandler(response, null)
+            },
+            Response.ErrorListener { error ->
+                completionHandler(null, error)
+            }) {
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", signingToken())
+                return headers
+            }
+        }
+        jsonObjReq.setRetryPolicy(DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+        {{ generator.camelize(generator.name) }}ApiConnector.instance?.addToRequestQueue(jsonObjReq, TAG)
+    }
+
+    override fun delete(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        var sb = StringBuilder()
+
+        val jsonObjReq = object : JsonObjectRequest(Method.DELETE, basePath + path + sb.toString(), params,
+            Response.Listener<JSONObject> { response ->
+                completionHandler(response, null)
+            },
+            Response.ErrorListener { error ->
+                completionHandler(null, error)
+            }) {
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Content-Type", "application/json")
+                headers.put("Authorization", signingToken())
+                return headers
+            }
+        }
+        {{ generator.camelize(generator.name) }}ApiConnector.instance?.addToRequestQueue(jsonObjReq, TAG)
+    }
+
+    override fun postMultipart(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        val volleyMultipartRequest = object : VolleyMultipartRequest(Method.POST, basePath + path, params,
+            object : Response.Listener<NetworkResponse> {
+                override fun onResponse(response: NetworkResponse) {
+                    val json = String(response.data, Charset.forName(HttpHeaderParser.parseCharset(response.headers)))
+                    completionHandler(JSONObject(json), null)
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError) {
+                    completionHandler(null, error)
+                }
+            }) {
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap(super.getHeaders())
+                headers.put("Authorization", signingToken())
+                return headers
+            }
+        }
+        volleyMultipartRequest.setRetryPolicy(DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+        {{ generator.camelize(generator.name) }}ApiConnector.instance?.addToRequestQueue(volleyMultipartRequest, TAG)
+    }
+}

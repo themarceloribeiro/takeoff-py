@@ -1,0 +1,34 @@
+package {{ generator.android_prefix }}.restclient
+
+import org.json.JSONObject
+
+class ApiController constructor(serviceInjection: ServiceInterface): ServiceInterface {
+
+    override var userToken: String? = null
+    private val service: ServiceInterface = serviceInjection
+
+    override fun post(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        service.userToken = this.userToken
+        service.post(path, params, completionHandler)
+    }
+
+    override fun get(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        service.userToken = this.userToken
+        service.get(path, params, completionHandler)
+    }
+
+    override fun patch(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        service.userToken = this.userToken
+        service.patch(path, params, completionHandler)
+    }
+
+    override fun delete(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        service.userToken = this.userToken
+        service.delete(path, params, completionHandler)
+    }
+
+    override fun postMultipart(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit) {
+        service.userToken = this.userToken
+        service.postMultipart(path, params, completionHandler)
+    }
+}

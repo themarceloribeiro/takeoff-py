@@ -1,0 +1,232 @@
+package {{ generator.android_prefix }}.services
+
+import android.util.Log
+import com.android.volley.VolleyError
+import {{ generator.android_prefix }}.models.RestEntity
+import {{ generator.android_prefix }}.restclient.ApiController
+import {{ generator.android_prefix }}.services.RestEntityServiceDelegate
+import {{ generator.android_prefix }}.restclient.VolleyService
+import org.json.JSONArray
+import org.json.JSONObject
+import java.net.URLEncoder
+import java.nio.charset.Charset
+
+open class RestEntityService {
+
+    var delegate: RestEntityServiceDelegate? = null
+    var userToken:String? = null
+
+    open fun findPath(id: Int): String {
+        return "/${indexPath()}/${id}.json"
+    }
+
+    fun getApiController(): ApiController {
+        val service = VolleyService()
+        val apiController = ApiController(service)
+        return apiController
+    }
+
+    fun formatParams(sb: StringBuilder, params: JSONObject, prefixKey: String?) {
+        val keys = params.keys()
+        var mPrefixKey = prefixKey
+        if(mPrefixKey == null) mPrefixKey = ""
+
+        while (keys.hasNext()) {
+            val nextKey = keys.next()
+            if(params.isNull(nextKey)) continue
+
+            var paramKey = mPrefixKey
+
+            if(paramKey.equals("")) {
+                paramKey = paramKey + nextKey
+            } else {
+                paramKey = paramKey + "%5B" + nextKey + "%5D"
+            }
+
+            if(params.get(nextKey) is JSONArray) {
+                val param = params.get(nextKey) as JSONArray
+                for (i in 0..(param.length() - 1)) {
+                    if(param.get(i) is JSONObject) {
+                        formatParams(sb, param.get(i) as JSONObject, paramKey + "%5B%5D")
+                    } else {
+                        sb.append(paramKey)
+                        if (!paramKey.endsWith("%5B%5D")) {
+                            sb.append("%5B%5D")
+                        }
+                        sb.append("=")
+                        sb.append(URLEncoder.encode(param.get(i) as String?, "UTF-8"))
+                        sb.append("&")
+                    }
+                }
+            } else {
+                sb.append(paramKey)
+                sb.append("=")
+                sb.append(URLEncoder.encode(params.getString(nextKey), "UTF-8"))
+                sb.append("&")
+            }
+        }
+    }
+
+    fun find(id: Int, parameters: JSONObject?) {
+        val apiController = getApiController()
+        val path = findPath(id)
+        apiController.userToken = userToken
+
+        var params = JSONObject()
+        if(parameters != null) {
+            params = parameters
+        }
+
+        apiController.get(path, params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.entityFound(response)
+                }
+            } else {
+                handleError("Could not fetch item", response, error)
+            }
+        }
+    }
+
+    fun all(parameters: JSONObject?) {
+        val apiController = getApiController()
+        val path = "/${indexPath()}.json"
+        apiController.userToken = userToken
+
+        var params = JSONObject()
+        if(parameters != null) {
+            params = parameters
+        }
+
+        apiController.get(path, params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.allFetched(response)
+                }
+            } else {
+                handleError("Could not fetch items", response, error)
+            }
+        }
+    }
+
+    fun search(parameters: JSONObject?) {
+        val apiController = getApiController()
+        val path = "/${searchPath()}.json"
+        apiController.userToken = userToken
+
+        var params = JSONObject()
+        if(parameters != null) {
+            params = parameters
+        }
+
+        apiController.get(path, params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.searchResults(response)
+                }
+            } else {
+                handleError("Could not fetch items", response, error)
+            }
+        }
+    }
+
+    fun handleError(defaultErrorText: String, response: JSONObject?, error: Any?) {
+        if(delegate() == null) return
+
+        if (error is VolleyError && error.networkResponse != null && error.networkResponse.data != null) {
+            try {
+                var body = String(error.networkResponse.data, Charset.forName("UTF-8"))
+                var json = JSONObject(body)
+                delegate!!.displayError(json.get("message") as String)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                delegate()!!.displayError("Error #5001 " + defaultErrorText)
+            }
+
+        } else {
+            delegate()!!.displayError("Error #5002 " + defaultErrorText)
+        }
+    }
+
+    open fun create(entity: RestEntity, extra_params: JSONObject) {
+        var apiController = getApiController()
+        val path = "/${createPath(entity)}.json"
+        val params = extra_params
+        params.put(entity.resourceName(), entity.toJson())
+
+        apiController.userToken = userToken
+        apiController.post(path, params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.entityCreated(response)
+                }
+            } else {
+                handleError("Could not create ${entity.resourceName()}", response, error)
+            }
+        }
+    }
+
+    fun update(entity: RestEntity) {
+        var apiController = getApiController()
+        val params = JSONObject()
+        params.put(entity.resourceName(), entity.toJson())
+
+        apiController.userToken = userToken
+        apiController.patch(updatePath(entity), params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.entityUpdated(response)
+                }
+            } else {
+                handleError("Could not update ${entity.resourceName()}", response, error)
+            }
+        }
+    }
+
+    fun delete(entity: RestEntity) {
+        delete(entity, JSONObject())
+    }
+
+    fun delete(entity: RestEntity, extra_params: JSONObject) {
+        var apiController = getApiController()
+        val params = extra_params
+        params.put(entity.resourceName(), entity.toJson())
+        val sb = StringBuilder()
+        formatParams(sb, params, null)
+
+        apiController.userToken = userToken
+        apiController.delete(updatePath(entity) + "?" + sb.toString(), params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.entityDeleted(response)
+                }
+            } else {
+                handleError("Could not delete ${entity.resourceName()}", response, error)
+            }
+        }
+    }
+
+    open fun updatePath(entity: RestEntity): String {
+        return "/${createPath(entity)}/${entity.getRemoteId()}.json"
+    }
+
+    open fun delegate(): RestEntityServiceDelegate? {
+        return null
+    }
+
+    open fun createPath(entity: RestEntity): String {
+        return entity.resourcePlural()
+    }
+
+    open fun indexPath(): String {
+        return ""
+    }
+
+    open fun searchPath(): String {
+        return ""
+    }
+
+    open fun publicSearchPath(): String {
+        return ""
+    }
+}

@@ -1,0 +1,12 @@
+package {{ generator.android_prefix }}.restclient
+
+import org.json.JSONObject
+
+interface ServiceInterface {
+    var userToken: String?
+    fun get(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit)
+    fun post(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit)
+    fun patch(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit)
+    fun delete(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit)
+    fun postMultipart(path: String, params: JSONObject, completionHandler: (response: JSONObject?, error: Any?) -> Unit)
+}
