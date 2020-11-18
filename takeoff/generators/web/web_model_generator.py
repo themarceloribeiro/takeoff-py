@@ -17,7 +17,7 @@ class WebModelGenerator(WebBaseGenerator):
         print(f"Running Web Model Generator: {self.name} : {self.model_name}")
         self.load_attributes()
         self.write_model_file()
-        self.update_models_file()        
+        self.update_models_file()
         self.generate_migration()
         self.register_admin()
 

@@ -6,37 +6,17 @@ from shutil import copyfile
 
 class AndroidProjectGenerator(AndroidBaseGenerator):
 
-    def __init__(self, name, options):
-        super().__init__(name, options)
-        self.name = name
-        self.options = options
-        self.android_prefix = ''
-        self.templates_path = f"{self.templates_path}/android"
-
-        for option in options:
-            if 'android_prefix' in option:
-                self.android_prefix = option.split('=')[1]        
-
-        self.product_package = f"{self.android_prefix}.{self.name.replace(' ', '').lower()}"
-
-    def android_sdk_path(self):
-        return "/Users/marcelo/Library/Android/sdk"
-
     def run(self):
         self.setup()
         print(f">>> Running Android Project Generator: {self.name}")
         self.create_structure_folders()
         self.create_structure_files()
 
-    
-    def product_path(self):
-        return f"{self.android_prefix.replace('.', '/')}/{self.name.replace(' ', '').lower()}"
-
     def create_structure_folders(self):
         print(f">>> Creating directory structure: {self.android_prefix}.{self.name}")
 
         for folder in self.main_project_folders():
-            fullpath = f"dist/{self.name.replace(' ', '').lower()}/android/{folder}"
+            fullpath = f"{self.project_folder()}/{folder}"
             print(f"    Creating Android Folder: {fullpath}")
             os.system(f"mkdir -p {fullpath}")
 
@@ -55,13 +35,13 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
 
         main_files = self.main_project_files()
         for template_source in main_files:
-            destination = f"dist/{self.name.replace(' ', '').lower()}/android/{main_files[template_source]}"
+            destination = f"{self.project_folder()}/{main_files[template_source]}"
             print(f"    Creating Android File: {destination}")
             self.render_template_file(template_source, destination)
 
         copy_files = self.main_copy_files()
         for source in copy_files:
-            destination = f"dist/{self.name.replace(' ', '').lower()}/android/{copy_files[source]}"
+            destination = f"{self.project_folder()}/{copy_files[source]}"
             print(f"    Copying Android File: {destination}")
             copyfile(f"takeoff/file_resources/android/{source}", destination)
 

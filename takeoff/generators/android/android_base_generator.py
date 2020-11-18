@@ -6,6 +6,22 @@ from pathlib import Path
 class AndroidBaseGenerator(GeneratorBase):
     def __init__(self, name, options):
         super().__init__(name, options)
+        self.name = name
+        self.options = options
+        self.android_prefix = ''
+        self.templates_path = f"{self.templates_path}/android"
+
+        for option in options:
+            if 'android_prefix' in option:
+                self.android_prefix = option.split('=')[1]
+        
+        if self.android_prefix == '':
+            self.android_prefix = f"com.{self.name}.app"            
+
+        self.product_package = f"{self.android_prefix}.{self.name.replace(' ', '').lower()}"        
+
+    def android_sdk_path(self):
+        return "/Users/marcelo/Library/Android/sdk"
 
     def project_type(self):
         return 'android'

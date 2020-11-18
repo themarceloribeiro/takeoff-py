@@ -1,1 +1,2 @@
 from .android_project_generator import AndroidProjectGenerator
+from .android_entity_generator import AndroidEntityGenerator

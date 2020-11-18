@@ -1,0 +1,47 @@
+package {{ generator.android_prefix }}.models
+
+import org.json.JSONObject
+
+open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
+
+    var remote_id:Int? = null
+    {% for attribute in generator.entity_attributes -%}
+    var {{ attribute['name'] }}: {{ attribute['class'] }}? = null
+    {% endfor %}
+
+    constructor() {}
+
+    constructor(jsonObject: JSONObject) {
+        fromJson(jsonObject)
+    }    
+
+    override fun resourceName(): String {
+        return "{{ generator.entity_name }}"
+    }
+
+    override fun resourcePlural(): String {
+        return "{{ generator.pluralize(generator.entity_name) }}"
+    }
+
+    override fun getRemoteId(): Int {
+        return remote_id!!
+    }
+
+    fun fromJson(jsonObject: JSONObject) {
+        this.remote_id = jsonObject.optInt("id")
+        {% for attribute in generator.entity_attributes -%}
+        this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['class'] }}("{{ attribute['name'] }}")
+        {% endfor %}
+    }
+
+    override fun toJson(): JSONObject {
+        var json = JSONObject()
+
+        json.put("id", remote_id)
+        {% for attribute in generator.entity_attributes -%}
+        json.put("{{ attribute['name'] }}", {{ attribute['name'] }})
+        {% endfor %}
+
+        return json
+    }
+}

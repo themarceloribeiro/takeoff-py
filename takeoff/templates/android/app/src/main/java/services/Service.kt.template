@@ -1,0 +1,11 @@
+package {{ generator.android_prefix }}.services
+
+object {{ generator.camelize(generator.entity_name) }}Service : RestEntityService() {
+    override fun indexPath(): String {
+        return "{{  generator.pluralize(generator.entity_name) }}"
+    }
+
+    override fun delegate(): RestEntityServiceDelegate? {
+        return {{ generator.camelize(generator.entity_name) }}Service.delegate
+    }
+}
