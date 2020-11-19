@@ -1,0 +1,78 @@
+package {{ generator.android_prefix }}.models.helpers;
+
+import org.json.JSONObject;
+import java.text.SimpleDateFormat
+import java.util.*
+
+open class DateTimeHelper {
+
+    val sdfDateTimeHelper   = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    val sdfDateTimeHelper2  = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+
+    fun readDate(json: JSONObject, field: String): Date? {
+        if(!json.has(field) || json.getString(field) == "null" || json.getString(field) == "") {
+            return null
+        }
+        val parser = if(json.getString(field).contains("Z")) {
+            sdfDateTimeHelper.timeZone = TimeZone.getTimeZone("UTC")
+            sdfDateTimeHelper
+        } else {
+            sdfDateTimeHelper2
+        }
+        return Date(parser.parse(json.getString(field)).time)
+    }
+
+    fun readDate(stringValue: String?): Date? {
+        if (stringValue == null || stringValue.equals("null") ||  stringValue == "") {
+            return null
+        }
+
+        return sdfDateTimeHelper.parse(stringValue)
+    }
+
+    fun readLongDate(longValue: Long?): Date? {
+        if(longValue == null) {
+            return null
+        }
+        return Date(longValue!! * 1000)
+    }
+
+    fun putDate(json: JSONObject, field: String, dateValue: Date?) {
+        if(dateValue == null) {  return  }
+        json.put(field, sdfDateTimeHelper.format(dateValue))
+    }
+
+    fun putLongDate(json: JSONObject, field: String, dateValue: Date?) {
+        if(dateValue == null) {
+            return
+        }
+        json.put(field, dateValue.time / 1000)
+    }
+
+    fun formatDate(dateValue: Date?): String {
+        if(dateValue == null) {
+            return ""
+        }
+        return sdfDateTimeHelper.format(dateValue)
+    }
+
+    fun formatSpecialDate(dateValue: Date?): String {
+        val sdf = SimpleDateFormat("MMM")
+        if(dateValue == null) {
+            return ""
+        }
+        return (sdf.format(dateValue) + " " + namedDay(dateValue)).trim()
+    }
+
+    fun namedDay(dateValue: Date?): String {
+        if(dateValue == null) return ""
+        val suffixes = arrayOf("th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+                                "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+                                "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
+                                "th", "st")
+
+        val formatDayOfMonth = SimpleDateFormat("d")
+        val day = Integer.parseInt(formatDayOfMonth.format(dateValue))
+        return day.toString() + suffixes[day]
+    }
+}

@@ -1,8 +1,12 @@
 package {{ generator.android_prefix }}.models
 
 import org.json.JSONObject
+import java.util.Date
+import {{ generator.android_prefix }}.models.helpers.DateTimeHelper
 
 open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
+
+    val dateHelper = DateTimeHelper()
 
     var remote_id:Int? = null
     {% for attribute in generator.entity_attributes -%}
@@ -30,7 +34,11 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
     fun fromJson(jsonObject: JSONObject) {
         this.remote_id = jsonObject.optInt("id")
         {% for attribute in generator.entity_attributes -%}
-        this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['class'] }}("{{ attribute['name'] }}")
+            {%- if attribute['class'] == 'Date' -%}
+                this.{{ attribute['name'] }} = dateHelper.readDate(jsonObject,"{{ attribute['name'] }}")
+            {%- else -%}
+                this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['class'] }}("{{ attribute['name'] }}")
+            {%- endif %}
         {% endfor %}
     }
 
@@ -39,9 +47,12 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
 
         json.put("id", remote_id)
         {% for attribute in generator.entity_attributes -%}
-        json.put("{{ attribute['name'] }}", {{ attribute['name'] }})
+            {%- if attribute['class'] == 'Date' -%}
+                dateHelper.putDate(json, "{{ attribute['name'] }}", {{ attribute['name'] }})
+            {%- else -%}
+                json.put("{{ attribute['name'] }}", {{ attribute['name'] }})
+            {%- endif %}
         {% endfor %}
-
         return json
     }
 }

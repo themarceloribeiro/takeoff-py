@@ -1,0 +1,105 @@
+package {{ generator.android_prefix }}.base
+
+import android.content.*
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.models.User
+import {{ generator.android_prefix }}.services.RestEntityServiceDelegate
+import com.orm.SugarRecord
+import com.tapadoo.alerter.Alerter
+import org.json.JSONObject
+
+open class BaseActivity :  AppCompatActivity(), RestEntityServiceDelegate {
+    var privateSettings: SharedPreferences? = null
+    var currentUser: User? = null
+    var currentFragment: BaseFragment? = null
+    var mLoadingView: View? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        privateSettings =  getSharedPreferences("private_data", Context.MODE_PRIVATE)
+    }
+
+    fun currentUser(): User? {
+        var users = SugarRecord.listAll(User::class.java)
+
+        if(users.count() > 0) {
+            var user = users.last()
+            this.currentUser = user
+            return user
+        } else {
+            return null
+        }
+    }
+
+    override fun displayError(message: String) {
+        Alerter.create(this)
+                .setTitle("Error")
+                .setText(message)
+                .setBackgroundColorRes(R.color.error)
+                .show();
+    }
+
+    override fun displayNotice(message: String) {
+        Alerter.create(this)
+                .setTitle("Notice")
+                .setText(message)
+                .setBackgroundColorRes(R.color.success)
+                .show();
+    }
+
+    override fun entityCreated(response: JSONObject) {
+    }
+
+    override fun entityUpdated(response: JSONObject) {
+    }
+
+    override fun entityDeleted(response: JSONObject) {
+    }
+
+    override fun allFetched(response: JSONObject) {
+    }
+
+    override fun searchResults(response: JSONObject) {
+    }
+
+    fun startLoading() {
+        loadingView()!!.visibility = View.VISIBLE
+    }
+
+    fun stopLoading() {
+        if(loadingView() == null) return
+        loadingView()!!.visibility = View.INVISIBLE
+    }
+
+    fun loadingView(): View? {
+        if(mLoadingView == null) {
+            mLoadingView = findViewById(R.id.loadingView)
+        }
+        return mLoadingView
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(currentFragment != null) {
+            currentFragment!!.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    override fun entityFound(response: JSONObject) {
+        stopLoading()
+    }
+
+    fun showFragment(fragment: BaseFragment) {
+        showFragment(fragment, false)
+    }
+
+    fun showFragment(fragment: BaseFragment, isFirst: Boolean) {
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.homeContainer, fragment)
+        if(!isFirst) {  ft.addToBackStack(null)  }
+        ft.commit()
+    }
+}

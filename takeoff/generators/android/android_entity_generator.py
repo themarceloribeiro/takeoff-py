@@ -58,7 +58,9 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             'text': 'String',
             'integer': 'Int',
             'float': 'Float',
-            'boolean': 'Boolean'
+            'boolean': 'Boolean',
+            'date': 'Date',
+            'datetime': 'Date'
         }
         return switcher.get(type, 'String')
     

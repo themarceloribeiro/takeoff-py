@@ -1,0 +1,125 @@
+package {{ generator.android_prefix }}.base
+
+import android.content.Context
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.home.HomeActivity
+import {{ generator.android_prefix }}.models.User
+import {{ generator.android_prefix }}.services.RestEntityServiceDelegate
+import com.tapadoo.alerter.Alerter
+import com.tapadoo.alerter.OnHideAlertListener
+import org.json.JSONObject
+
+open class BaseFragment : Fragment(), RestEntityServiceDelegate {
+
+    var tabId = -1
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (activity is BaseActivity) {
+            (activity as BaseActivity).currentFragment = this
+        }
+    }
+
+    override fun displayError(message: String) {
+        if(activity == null) return
+
+        stopLoading()
+        Alerter.create(activity!!)
+                .setTitle("Error")
+                .setText(message)
+                .setBackgroundColorRes(R.color.error)
+                .setOnClickListener { Alerter.clearCurrent(activity!!) }
+                .show()
+    }
+
+    override fun displayNotice(message: String) {
+        displayNotice(message, 5000)
+    }
+
+    fun displayNotice(message: String, duration: Long) {
+        if(activity == null) return
+
+        Alerter.create(activity!!)
+                .setTitle("Success")
+                .setText(message)
+                .setBackgroundColorRes(R.color.success)
+                .setDuration(duration)
+                .setOnClickListener { Alerter.clearCurrent(activity!!) }
+                .show()
+    }
+
+    fun displayNotice(message: String, listener: OnHideAlertListener) {
+        if(activity == null) return
+
+        Alerter.create(activity!!)
+                .setTitle("Notice")
+                .setText(message)
+                .setBackgroundColorRes(R.color.success)
+                .setOnHideListener(listener)
+                .show()
+    }
+
+    override fun entityCreated(response: JSONObject) {
+        stopLoading()
+    }
+
+    override fun entityFound(response: JSONObject) {
+        stopLoading()
+    }
+
+    override fun entityUpdated(response: JSONObject) {
+        stopLoading()
+    }
+
+    override fun entityDeleted(response: JSONObject) {
+        stopLoading()
+    }
+
+    override fun allFetched(response: JSONObject) {
+        stopLoading()
+    }
+
+    override fun searchResults(response: JSONObject) {
+        stopLoading()
+    }
+
+    fun homeActivity(): HomeActivity {
+        return (activity as HomeActivity)
+    }
+
+    fun startLoading(): Boolean {
+        if(activity == null) return false
+        if(activity is BaseActivity) {
+            (activity as BaseActivity).startLoading()
+        }
+        return true
+    }
+
+    open fun stopLoading(): Boolean {
+        if(activity == null) return false
+        if(activity is BaseActivity) {
+            (activity as BaseActivity).stopLoading()
+        }
+        return true
+    }
+
+    fun currentUser(): User? {
+        if(activity != null  && activity is BaseActivity) {
+            return (activity as BaseActivity).currentUser()
+        }
+
+        return null
+    }
+
+    fun convertDpToPx(context: Context, dp: Double): Int {
+        return (dp * context.getResources().getDisplayMetrics().density).toInt()
+    }
+
+    fun convertPxToDp(context: Context, px: Float): Float {
+        return px / context.resources.displayMetrics.density
+    }
+}
