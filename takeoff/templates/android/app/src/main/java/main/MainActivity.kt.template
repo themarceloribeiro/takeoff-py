@@ -1,0 +1,22 @@
+package {{ generator.android_prefix }}.main
+
+import android.content.Intent
+import android.os.Bundle
+import {{ generator.android_prefix }}.base.BaseActivity
+import {{ generator.android_prefix }}.home.HomeActivity
+
+class MainActivity: BaseActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        applicationDidLaunch()
+    }
+
+    fun applicationDidLaunch() {
+        presentHome()
+    }
+
+    fun presentHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+    }
+}

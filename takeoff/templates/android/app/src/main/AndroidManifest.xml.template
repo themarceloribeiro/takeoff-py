@@ -28,12 +28,13 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="{{ generator.android_prefix }}" />
 
-        <activity android:name=".home.HomeActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".home.HomeActivity"/>
     </application>
 
 </manifest>
