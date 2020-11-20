@@ -15,6 +15,7 @@
         android:theme="@style/Theme.{{ generator.camelize(generator.name) }}"
         tools:replace="android:icon,android:theme,android:allowBackup">
 
+        <!-- StartMetadata / Not to be removed -->
         <meta-data
             android:name="DATABASE"
             android:value="{{ generator.camelize(generator.name) }}.db" />
@@ -27,7 +28,9 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="{{ generator.android_prefix }}" />
-
+        <!-- EndMetadata / Not to be removed -->
+        
+        <!-- StartActivities / Not to be removed -->
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +38,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".home.HomeActivity"/>
+        <!-- EndActivities / Not to be removed -->
     </application>
 
 </manifest>

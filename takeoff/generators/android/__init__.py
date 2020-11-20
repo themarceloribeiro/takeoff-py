@@ -1,2 +1,3 @@
 from .android_project_generator import AndroidProjectGenerator
 from .android_entity_generator import AndroidEntityGenerator
+from .android_authentication_generator import AndroidAuthenticationGenerator

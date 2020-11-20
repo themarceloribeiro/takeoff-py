@@ -41,7 +41,7 @@ class WebResourceGenerator(WebBaseGenerator):
             last_line += 1
 
         with open(destination, 'w') as file:
-            file.writelines(lines)        
+            file.writelines(lines)
 
 
     def writeable_attributes(self):

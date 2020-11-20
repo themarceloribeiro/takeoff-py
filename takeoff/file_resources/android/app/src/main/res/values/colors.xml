@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="error">#FF0000</color>
     <color name="success">#4CAF50</color>
+    <color name="link_color">#2196F3</color>
 </resources>

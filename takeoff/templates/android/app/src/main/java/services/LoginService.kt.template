@@ -1,0 +1,53 @@
+package {{ generator.android_prefix }}.services
+
+import {{ generator.android_prefix }}.restclient.ApiController
+import {{ generator.android_prefix }}.restclient.VolleyService
+import org.json.JSONObject
+
+object LoginService {
+
+    var delegate: LoginServiceDelegate? = null
+
+    fun login(email: String?, password: String?) {
+        val service = VolleyService()
+        val apiController = ApiController(service)
+        val path = "/tokens.json"
+
+        val params = JSONObject()
+        params.put("email", email)
+        params.put("password", password)
+
+        apiController.post(path, params) { response, error ->
+            if(response != null) {
+                if(delegate != null) {
+                    delegate!!.loggedIn(response)
+                }
+            } else {
+                if(delegate != null) {
+                    delegate!!.displayError("Invalid email and/or password")
+                }
+            }
+        }
+    }
+
+    fun resetPassword(email: String?) {
+        val service = VolleyService()
+        val apiController = ApiController(service)
+        val path = "/forgot-password.json"
+
+        var params = JSONObject()
+        params.put("email", email)
+
+        apiController.post(path, params) { response, error ->
+            if(response != null) {
+                if(delegate != null) {
+                    delegate!!.passwordEmailSent(response)
+                }
+            } else {
+                if(delegate != null) {
+                    delegate!!.displayError("Invalid email address")
+                }
+            }
+        }
+    }
+}

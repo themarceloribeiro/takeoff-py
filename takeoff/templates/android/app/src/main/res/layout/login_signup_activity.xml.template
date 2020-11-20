@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user_auth.LoginSignupActivity"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".signup.LoginSignupActivity"
+        android:id="@+id/loginSignupLayout">
+
+        <FrameLayout
+            android:id="@+id/formContainer"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
+
+        <Button
+            android:id="@+id/doneButton"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:background="@color/purple_500"
+            android:text="@string/log_in"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:typeface="normal"
+            android:layout_marginRight="24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/formContainer"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/haveAccountContainer"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/haveAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/have_an_account"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/loginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/link_button"
+                android:text="@string/log_in"
+                android:textAllCaps="false"
+                android:textColor="@color/link_color"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintLeft_toRightOf="@+id/haveAccount"
+                app:layout_constraintTop_toTopOf="@id/haveAccount"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/signupButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/newToApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dont_have_account"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/link_button"
+                android:text="@string/sign_up"
+                android:textAllCaps="false"
+                android:textColor="@color/link_color"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintLeft_toRightOf="@+id/newToApp"
+                app:layout_constraintTop_toTopOf="@id/newToApp" />
+
+        </LinearLayout>
+
+        <com.tuyenmonkey.mkloader.MKLoader
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:mk_type="FishSpinner"
+            app:mk_color="@color/purple_200"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="0dp"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

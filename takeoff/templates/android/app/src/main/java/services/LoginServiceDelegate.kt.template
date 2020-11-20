@@ -1,0 +1,8 @@
+package {{ generator.android_prefix }}.services
+
+import org.json.JSONObject
+
+interface LoginServiceDelegate: RestServiceDelegate {
+    fun loggedIn(response: JSONObject?)
+    fun passwordEmailSent(response: JSONObject?)
+}

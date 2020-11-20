@@ -1,0 +1,67 @@
+package {{ generator.android_prefix }}.user_auth
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.base.BaseFragment
+import {{ generator.android_prefix }}.models.User
+import {{ generator.android_prefix }}.services.RestEntityServiceDelegate
+import {{ generator.android_prefix }}.services.UserService
+import kotlinx.android.synthetic.main.login_signup_activity.*
+import kotlinx.android.synthetic.main.signup_fragment.*
+import org.json.JSONObject
+import java.io.UnsupportedEncodingException
+
+class SignupFragment : BaseFragment(), RestEntityServiceDelegate {
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.signup_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as LoginSignupActivity).loginMode = false
+
+        var parentActivity = (activity as LoginSignupActivity)
+        parentActivity.setupButtonsListeners()
+        parentActivity.signupButton.visibility = View.INVISIBLE
+        parentActivity.loginButton.visibility = View.VISIBLE
+        parentActivity.newToApp.visibility = View.INVISIBLE
+        parentActivity.haveAccount.visibility = View.VISIBLE
+
+        parentActivity.setTitle("Sign up")
+
+        var doneButton = parentActivity.doneButton
+        doneButton.setOnClickListener {
+            signup()
+        }
+    }
+
+    fun signup() {
+        var user = User()
+        user.first_name             = firstNameField.text.toString()
+        user.last_name              = lastNameField.text.toString()
+        user.email                  = emailField.text.toString()
+        user.password               = passwordField.text.toString()
+        user.password_confirmation  = passwordField.text.toString()
+
+        var service = UserService
+        service.userToken = null
+        service.delegate = this
+        service.create(user)
+    }
+
+    override fun entityCreated(response: JSONObject) {
+        var userJson = response.get("user") as JSONObject
+        try {
+            val user = User(activity!!.applicationContext, userJson)
+            user.save()
+            (activity as LoginSignupActivity).redirectHome()
+        } catch (e: UnsupportedEncodingException) {
+            e.printStackTrace()
+        }
+    }
+}

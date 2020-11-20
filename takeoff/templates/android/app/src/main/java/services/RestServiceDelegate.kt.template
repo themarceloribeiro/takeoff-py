@@ -1,0 +1,5 @@
+package {{ generator.android_prefix }}.services
+
+interface RestServiceDelegate {
+    fun displayError(message: String)
+}

@@ -42,6 +42,15 @@ class GeneratorBase:
     def system_call(self, command):
         os.system(command)
 
+    def line_at_pattern(self, pattern, lines):
+        finish = 0
+
+        for index, line in enumerate(lines):
+            if pattern in line:
+                finish = index
+
+        return finish
+    
     def render_template(self, template_path, destination, overwrite=False):
         if os.path.exists(destination) and not overwrite:
             return
@@ -53,3 +62,49 @@ class GeneratorBase:
         contents = template.render(generator=self)
         with open(destination, 'w') as f:
             f.write(contents)
+
+    def add_line_before_pattern(self, destination, new_line, pattern):
+        lines = list(open(destination, 'r'))
+        last_line = self.line_at_pattern(pattern, lines)
+
+        if new_line not in lines:
+            lines.insert(last_line, new_line)
+            last_line += 1
+
+        with open(destination, 'w') as file:
+            file.writelines(lines)
+
+    def add_lines_before_last_line(self, destination, new_lines, identifier=''):
+        lines = list(open(destination, 'r'))
+
+        if identifier != '' and identifier in lines:
+            return
+
+        for new_line in new_lines:
+            lines.insert(len(lines) - 1, new_line)
+
+        with open(destination, 'w') as file:
+            file.writelines(lines)
+    
+    def replace_lines_for_block(self, destination, first_pattern, last_pattern, new_lines):
+        lines = list(open(destination, 'r'))
+        before_lines = []
+        after_lines = []
+        started = False
+        finished = False
+
+        for line in lines:
+            if first_pattern in line:
+                started = True
+            if last_pattern in line:
+                finished = True
+
+            if not started:
+                before_lines.append(line)
+            elif started and finished:
+                after_lines.append(line)
+
+        all_lines = before_lines + new_lines + after_lines
+
+        with open(destination, 'w') as file:
+            file.writelines(all_lines)

@@ -18,17 +18,7 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
         for folder in self.main_project_folders():
             fullpath = f"{self.project_folder()}/{folder}"
             print(f"    Creating Android Folder: {fullpath}")
-            os.system(f"mkdir -p {fullpath}")
-
-    def render_template_file(self, template_source, destination):
-        template_path = os.path.join(self.templates_path, f"{template_source}.template")
-        
-        with open(template_path) as f:
-            template_contents = f.read()
-
-        template = Template(template_contents)
-        with open(destination, 'w') as f:
-            f.write(template.render(generator=self))            
+            os.system(f"mkdir -p {fullpath}")         
 
     def create_structure_files(self):
         print(f">>> Creating file structure: {self.android_prefix}.{self.name}")
@@ -37,7 +27,7 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
         for template_source in main_files:
             destination = f"{self.project_folder()}/{main_files[template_source]}"
             print(f"    Creating Android File: {destination}")
-            self.render_template_file(template_source, destination)
+            self.render_template(f"{self.templates_path}/{template_source}.template", destination, False)
 
         copy_files = self.main_copy_files()
         for source in copy_files:
@@ -89,6 +79,9 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/res/layout/home_activity.xml': 'app/src/main/res/layout/home_activity.xml',            
             'app/src/main/res/menu/nav_items.xml': 'app/src/main/res/menu/nav_items.xml',
             'app/src/main/res/drawable/menu_item.xml': 'app/src/main/res/drawable/home_item.xml',
+            'app/src/main/res/drawable/button_background.xml': 'app/src/main/res/drawable/button_background.xml',
+            'app/src/main/res/drawable/button_white_background.xml': 'app/src/main/res/drawable/button_white_background.xml',
+            'app/src/main/res/drawable/link_button.xml': 'app/src/main/res/drawable/link_button.xml',
             'settings.gradle': 'settings.gradle',
             'local.properties': 'local.properties',
             'app/src/main/java/base/BaseActivity.kt': f"app/src/main/java/{package_path}/base/BaseActivity.kt",
@@ -104,6 +97,7 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/java/restclient/VolleyService.kt': f"app/src/main/java/{package_path}/restclient/VolleyService.kt",
             'app/src/main/java/services/RestEntityService.kt': f"app/src/main/java/{package_path}/services/RestEntityService.kt",
             'app/src/main/java/services/RestEntityServiceDelegate.kt': f"app/src/main/java/{package_path}/services/RestEntityServiceDelegate.kt",
+            'app/src/main/java/services/RestServiceDelegate.kt': f"app/src/main/java/{package_path}/services/RestServiceDelegate.kt",            
         }
     
     def main_copy_files(self):

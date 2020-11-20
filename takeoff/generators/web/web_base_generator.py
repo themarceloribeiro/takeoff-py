@@ -72,15 +72,6 @@ class WebBaseGenerator(GeneratorBase):
 
         return finish
 
-    def pattern_last_line(self, pattern, lines):
-        finish = 0
-
-        for index, line in enumerate(lines):
-            if pattern in line:
-                finish = index
-
-        return finish
-
     def installed_apps_last_line(self, lines):
         started = False
         finish = 0
@@ -94,10 +85,10 @@ class WebBaseGenerator(GeneratorBase):
         return finish
 
     def resources_last_line(self, lines):
-        return self.pattern_last_line('EndResources', lines)
+        return self.line_at_pattern('EndResources', lines)
 
     def auth_last_line(self, lines):
-        return self.pattern_last_line('EndAuth', lines)
+        return self.line_at_pattern('EndAuth', lines)
 
     def render_main_view_template(self):
         template_path = f"{self.templates_path}/web/main_view.template"

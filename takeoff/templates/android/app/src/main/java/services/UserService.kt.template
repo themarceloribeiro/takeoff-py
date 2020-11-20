@@ -1,0 +1,25 @@
+package {{ generator.android_prefix }}.services
+
+import {{ generator.android_prefix }}.models.RestEntity
+import org.json.JSONObject
+
+object UserService : RestEntityService() {
+
+    override fun createPath(entity: RestEntity): String {
+        return "users"
+    }
+
+    override fun indexPath(): String {
+        return "users"
+    }
+
+    override fun delegate(): RestEntityServiceDelegate? {
+        return UserService.delegate
+    }
+
+    fun create(entity: RestEntity) {
+        var extra_params = JSONObject()
+        super.create(entity, extra_params)
+    }
+
+}

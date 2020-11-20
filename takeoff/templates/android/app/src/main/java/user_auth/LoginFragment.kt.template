@@ -1,0 +1,56 @@
+package {{ generator.android_prefix }}.user_auth
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.base.BaseFragment
+import {{ generator.android_prefix }}.models.User
+import {{ generator.android_prefix }}.services.RestServiceDelegate
+import {{ generator.android_prefix }}.services.LoginService
+import {{ generator.android_prefix }}.services.LoginServiceDelegate
+import kotlinx.android.synthetic.main.login_fragment.*
+import kotlinx.android.synthetic.main.login_signup_activity.*
+import org.json.JSONObject
+
+class LoginFragment : BaseFragment(), LoginServiceDelegate, RestServiceDelegate {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.login_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as LoginSignupActivity).loginMode = true
+
+        var parentActivity = (activity as LoginSignupActivity)
+        parentActivity.setupButtonsListeners()
+        parentActivity.loginButton.visibility = View.INVISIBLE
+        parentActivity.haveAccount.visibility = View.INVISIBLE
+        parentActivity.signupButton.visibility = View.VISIBLE
+        parentActivity.newToApp.visibility = View.VISIBLE
+
+        var doneButton = parentActivity.doneButton
+        doneButton.setOnClickListener {
+            login()
+        }
+    }
+
+    fun login() {
+        var service = LoginService
+        service.delegate = this
+        service.login(emailField.text.toString(), passwordField.text.toString())
+    }
+
+    override fun loggedIn(response: JSONObject?) {
+        var userJson = response!!.get("user") as JSONObject
+        val user = User(activity!!.applicationContext, userJson)
+        user.save()
+        (activity as LoginSignupActivity).redirectHome()
+    }
+
+    override fun passwordEmailSent(response: JSONObject?) {
+    }
+
+}
