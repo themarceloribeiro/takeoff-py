@@ -33,12 +33,13 @@ class AndroidBaseGenerator(GeneratorBase):
 
     def add_string_translation(self, key, value):
         destination = f"{self.project_folder()}/app/src/main/res/values/strings.xml"
-        new_line = f"<string name=\{key}\">{value}</string>\n"
+        new_line = f"<string name=\"{key}\">{value}</string>\n"
         self.add_line_before_pattern(destination, new_line, '/resources')
     
     def add_method_to_class(self, kotlin_class, method, identifier=''):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
         new_lines = method.split("\n")
+        new_lines.append("")
         self.add_lines_before_last_line(destination, new_lines, identifier)
     
     def replace_lines_for_method(self, kotlin_class, method, lines):
@@ -47,11 +48,11 @@ class AndroidBaseGenerator(GeneratorBase):
     
     def add_attribute_to_entity(self, entity_name, attribute_name, attribute_type):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{entity_name}.kt"
-        new_line = f"var {attribute_name}: {attribute_type}? = null\n"
-        self.add_line_before_pattern(destination, new_line, f"class {entity_name}")
+        new_line = f"    var {attribute_name}: {attribute_type}? = null\n"
+        self.add_line_before_pattern(destination, new_line, f"constructor() ")
 
-        new_line = f"{attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"
+        new_line = f"        {attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"
         self.add_line_before_pattern(destination, new_line, f"EndFromJson")
 
-        new_line = f"json.put(\"{attribute_name}\", {attribute_name})\n"
+        new_line = f"        json.put(\"{attribute_name}\", {attribute_name})\n"
         self.add_line_before_pattern(destination, new_line, f"EndToJson")

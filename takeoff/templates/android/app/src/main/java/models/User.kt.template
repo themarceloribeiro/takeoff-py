@@ -32,11 +32,14 @@ class User : SugarRecord<User>, RestEntity {
 
     fun fromJson(jsonObject: JSONObject) {
         remote_id = jsonObject.get("id") as Int
+        // EndFromJson - Do not remove
     }
 
     override fun toJson():JSONObject {
         val json = JSONObject()
         json.put("id", remote_id)
+        // EndToJson - Do not remove
+
         return json
     }
 }

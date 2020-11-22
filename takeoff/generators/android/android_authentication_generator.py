@@ -15,6 +15,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
         self.add_manifest_activity('.user_auth.LoginSignupActivity')
         self.add_main_activity_methods()
         self.add_application_launched_callback()
+        self.add_login_strings()
 
     def create_structure_folders(self):
         print(f">>> Creating directory structure: {self.android_prefix}.{self.name}")
@@ -66,21 +67,20 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
     
     def add_main_activity_methods(self):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/main/MainActivity.kt"
-        new_line = f"import {self.android_prefix}.user_auth.LoginSignupActivity"
-
+        new_line = f"import {self.android_prefix}.user_auth.LoginSignupActivity\n\n"
         self.add_line_before_pattern(destination, new_line, 'class ')
 
         userLoggedIn = ("\n").join([
-            "fun userLoggedIn(): Boolean {",
-            "   val user = currentUser()",
-            "   return user != null && user.token != null",
-            "}"
+            "    fun userLoggedIn(): Boolean {",
+            "       val user = currentUser()",
+            "       return user != null && user.token != null",
+            "    }"
         ])
 
         presentLogin = ("\n").join([
-            "fun presentLogin() {",
-            "   startActivity(Intent(this, LoginSignupActivity::class.java))",
-            "}"
+            "    fun presentLogin() {",
+            "       startActivity(Intent(this, LoginSignupActivity::class.java))",
+            "    }"
         ])
 
         self.add_method_to_class('main/MainActivity.kt', userLoggedIn, 'userLoggedIn')
@@ -88,19 +88,30 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
     
     def add_application_launched_callback(self):
         lines = [
-            "if(userLoggedIn()) {\n",
-            "   presentHome()\n",
-            "} else {\n",
-            "   presentLogin()\n",
-            "}\n"
+            "        // UserAuth Check - do not remove\n",
+            "        if(userLoggedIn()) {\n",
+            "           presentHome()\n",
+            "        } else {\n",
+            "           presentLogin()\n",
+            "        }\n"
         ]
 
-        self.replace_lines_for_method('main/MainActivity.kt', 'applicationDidLaunch', lines)
+        self.replace_lines_for_method('main/MainActivity.kt', 'fun applicationDidLaunch', lines)
     
     def add_user_attributes(self):
-        self.add_attribute_to_entity('User', 'first_name', 'string')
-        self.add_attribute_to_entity('User', 'last_name', 'string')
-        self.add_attribute_to_entity('User', 'email', 'string')
+        self.add_attribute_to_entity('User', 'first_name', 'String')
+        self.add_attribute_to_entity('User', 'last_name', 'String')
+        self.add_attribute_to_entity('User', 'email', 'String')
         self.add_attribute_to_entity('User', 'password', 'String')
         self.add_attribute_to_entity('User', 'password_confirmation', 'String')
         self.add_attribute_to_entity('User', 'token', 'String')
+    
+    def add_login_strings(self):
+        self.add_string_translation('login', 'Login')
+        self.add_string_translation('have_an_account', 'Have an account?')
+        self.add_string_translation('log_in', 'Log in')
+        self.add_string_translation('dont_have_account', "Don\\'t have an account")
+        self.add_string_translation('sign_up', 'Sign up')
+        self.add_string_translation('forgot', 'Forgot your password?')
+        self.add_string_translation('password', 'Password?')
+        self.add_string_translation('login_hint', 'E-mail')

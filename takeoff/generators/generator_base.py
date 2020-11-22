@@ -67,8 +67,19 @@ class GeneratorBase:
         lines = list(open(destination, 'r'))
         last_line = self.line_at_pattern(pattern, lines)
 
-        if new_line not in lines:
+        if new_line.replace("\n\n", "\n") not in lines:
             lines.insert(last_line, new_line)
+            last_line += 1
+
+        with open(destination, 'w') as file:
+            file.writelines(lines)
+
+    def add_line_after_pattern(self, destination, new_line, pattern):
+        lines = list(open(destination, 'r'))
+        last_line = self.line_at_pattern(pattern, lines)
+
+        if new_line not in lines:
+            lines.insert(last_line + 1, new_line)
             last_line += 1
 
         with open(destination, 'w') as file:
@@ -77,32 +88,40 @@ class GeneratorBase:
     def add_lines_before_last_line(self, destination, new_lines, identifier=''):
         lines = list(open(destination, 'r'))
 
-        if identifier != '' and identifier in lines:
-            return
+        if identifier != '':
+            for line in lines:
+                if identifier in line:
+                    return
 
         for new_line in new_lines:
-            lines.insert(len(lines) - 1, new_line)
+            lines.insert(len(lines) - 1, f"{new_line}\n")
 
         with open(destination, 'w') as file:
             file.writelines(lines)
     
     def replace_lines_for_block(self, destination, first_pattern, last_pattern, new_lines):
         lines = list(open(destination, 'r'))
+        
+        # Pattern check: dont do a second pass
+        if new_lines[0] in lines:
+            return
+
         before_lines = []
         after_lines = []
         started = False
         finished = False
 
         for line in lines:
-            if first_pattern in line:
-                started = True
-            if last_pattern in line:
+            if started and last_pattern in line:
                 finished = True
 
             if not started:
                 before_lines.append(line)
             elif started and finished:
                 after_lines.append(line)
+
+            if first_pattern in line:
+                started = True
 
         all_lines = before_lines + new_lines + after_lines
 

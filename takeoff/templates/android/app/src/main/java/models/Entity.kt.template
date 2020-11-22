@@ -40,7 +40,7 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
                 this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['class'] }}("{{ attribute['name'] }}")
             {%- endif %}
         {% endfor %}
-        # EndFromJson - Do not remove
+        // EndFromJson - Do not remove
     }
 
     override fun toJson(): JSONObject {
@@ -54,7 +54,7 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
                 json.put("{{ attribute['name'] }}", {{ attribute['name'] }})
             {%- endif %}
         {% endfor %}
-        # EndToJson - Do not remove
+        // EndToJson - Do not remove
 
         return json
     }
