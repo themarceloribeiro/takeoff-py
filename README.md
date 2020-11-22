@@ -52,3 +52,46 @@ User authentication is also supported by a generator
 ```
 takeoff-generate web:authentication blog
 ```
+
+## Mobile: Android Support
+
+### New Project
+
+Start by creating a new project.
+
+```
+takeoff-generate android:project blog
+```
+
+### Generate rest entities
+
+You can generate rest entities that answer to a json schema from an API:
+
+```
+takeoff-generate android:entity blog title published:boolean published_at:datetime read_count:integer
+```
+
+
+### Generate user authentication
+
+User authentication is also supported by a generator
+
+```
+takeoff-generate android:authentication blog
+```
+
+And you can also ask for built-in facebook login:
+
+```
+facebook_auth=true facebook_app_id=XXXXXXXX facebook_scheme=fbXXXXXXXX
+```
+
+## Extra
+
+### Android Facebook Login
+
+Generating the key hash for facebook:
+
+```
+keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
+```

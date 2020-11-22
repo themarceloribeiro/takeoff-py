@@ -63,11 +63,11 @@ class GeneratorBase:
         with open(destination, 'w') as f:
             f.write(contents)
 
-    def add_line_before_pattern(self, destination, new_line, pattern):
+    def add_line_before_pattern(self, destination, new_line, pattern, force=False):
         lines = list(open(destination, 'r'))
         last_line = self.line_at_pattern(pattern, lines)
 
-        if new_line.replace("\n\n", "\n") not in lines:
+        if new_line not in lines or force:
             lines.insert(last_line, new_line)
             last_line += 1
 
@@ -99,8 +99,10 @@ class GeneratorBase:
         with open(destination, 'w') as file:
             file.writelines(lines)
     
-    def replace_lines_for_block(self, destination, first_pattern, last_pattern, new_lines):
+    def replace_lines_for_block(self, destination, first_pattern, block_start_pattern, block_end_pattern, new_lines):
+        new_lines = list(map(lambda x: f"{x}\n", new_lines.split("\n")))
         lines = list(open(destination, 'r'))
+        within_subblock = False
         
         # Pattern check: dont do a second pass
         if new_lines[0] in lines:
@@ -112,10 +114,55 @@ class GeneratorBase:
         finished = False
 
         for line in lines:
-            if started and last_pattern in line:
-                finished = True
+            if started and block_end_pattern in line:
+                if within_subblock:
+                    within_subblock = False
+                else:
+                    finished = True
+
+            if started and block_start_pattern in line:
+                within_subblock = True
 
             if not started:
+                before_lines.append(line)
+            elif started and finished:
+                after_lines.append(line)
+
+            if first_pattern in line:
+                started = True
+
+        all_lines = before_lines + new_lines + after_lines
+
+        with open(destination, 'w') as file:
+            file.writelines(all_lines)
+
+    def append_lines_to_block(self, destination, first_pattern, block_start_pattern, block_end_pattern, new_lines):
+        new_lines = list(map(lambda x: f"{x}\n", new_lines.split("\n")))
+        lines = list(open(destination, 'r'))
+        within_subblock = False
+        
+        # Pattern check: dont do a second pass
+        if new_lines[0] in lines:
+            return
+
+        before_lines = []
+        after_lines = []
+        started = False
+        finished = False
+
+        for line in lines:            
+            if started and block_end_pattern in line:
+                if within_subblock:
+                    within_subblock = False
+                else:
+                    finished = True
+
+            if started and block_start_pattern in line:
+                within_subblock = True
+
+            if not started:
+                before_lines.append(line)
+            elif started and not finished:
                 before_lines.append(line)
             elif started and finished:
                 after_lines.append(line)

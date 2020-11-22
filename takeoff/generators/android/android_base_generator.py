@@ -26,12 +26,26 @@ class AndroidBaseGenerator(GeneratorBase):
     def project_type(self):
         return 'android'
 
-    def add_manifest_activity(self, activity):
-        destination = f"{self.project_folder()}/app/src/main/AndroidManifest.xml"
-        new_line = f"<activity android:name=\"{activity}\"/>\n"
-        self.add_line_before_pattern(destination, new_line, 'EndActivities')
+    def add_gradle_implementation(self, library):
+        destination = f"{self.project_folder()}/app/build.gradle"
+        self.add_line_before_pattern(destination, f"    implementation '{library}'\n", 'testImplementation')        
 
-    def add_string_translation(self, key, value):
+    def add_import_line(self, destination, new_line):
+        self.add_line_before_pattern(destination, f"import {new_line}\n", 'class ')        
+
+    def add_manifest_metadata(self, activity_contents):
+        destination = f"{self.project_folder()}/app/src/main/AndroidManifest.xml"
+        self.add_line_before_pattern(destination, f"{activity_contents}\n", 'EndMetadata')
+
+    def add_manifest_activity(self, activity_contents):
+        destination = f"{self.project_folder()}/app/src/main/AndroidManifest.xml"
+        self.add_line_before_pattern(destination, f"{activity_contents}\n", 'EndActivities')
+
+    def add_layout_component(self, layout, contents):
+        destination = f"{self.project_folder()}/app/src/main/res/layout/{layout}"
+        self.add_lines_before_last_line(destination, contents.split("\n"))
+
+    def add_string_value(self, key, value):
         destination = f"{self.project_folder()}/app/src/main/res/values/strings.xml"
         new_line = f"<string name=\"{key}\">{value}</string>\n"
         self.add_line_before_pattern(destination, new_line, '/resources')
@@ -40,12 +54,21 @@ class AndroidBaseGenerator(GeneratorBase):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
         new_lines = method.split("\n")
         new_lines.append("")
-        self.add_lines_before_last_line(destination, new_lines, identifier)
+        self.add_lines_before_last_line(destination, new_lines, f"fun {identifier}")
     
     def replace_lines_for_method(self, kotlin_class, method, lines):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
-        self.replace_lines_for_block(destination, method, '}', lines)
-    
+        self.replace_lines_for_block(destination, method, '{', '}', lines)
+
+    def append_lines_to_method(self, kotlin_class, method, lines):
+        destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
+        self.append_lines_to_block(destination, method, '{', '}', lines)        
+
+    def add_attribute_to_activity(self, activity, attribute_name, attribute_default_value):
+        destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{activity}"
+        new_line = f"    var {attribute_name} = {attribute_default_value}\n"
+        self.add_line_before_pattern(destination, new_line, 'override fun onCreate')
+
     def add_attribute_to_entity(self, entity_name, attribute_name, attribute_type):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{entity_name}.kt"
         new_line = f"    var {attribute_name}: {attribute_type}? = null\n"

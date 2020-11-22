@@ -1,7 +1,8 @@
-package {{ generator.android_prefix }}.services
+package com.gradualnest.app.services
 
-import {{ generator.android_prefix }}.restclient.ApiController
-import {{ generator.android_prefix }}.restclient.VolleyService
+import android.util.Log
+import com.gradualnest.app.restclient.ApiController
+import com.gradualnest.app.restclient.VolleyService
 import org.json.JSONObject
 
 object LoginService {
@@ -9,6 +10,10 @@ object LoginService {
     var delegate: LoginServiceDelegate? = null
 
     fun login(email: String?, password: String?) {
+        login(email, password)
+    }
+
+    fun login(email: String?, password: String?, first_name: String?, last_name: String?, provider: String?, provider_id: String?) {
         val service = VolleyService()
         val apiController = ApiController(service)
         val path = "/tokens.json"
@@ -16,6 +21,11 @@ object LoginService {
         val params = JSONObject()
         params.put("email", email)
         params.put("password", password)
+
+        if (first_name != null) {  params.put("first_name", first_name)  }
+        if (last_name != null) { params.put("last_name", last_name) }
+        if (provider != null) { params.put("provider", provider) }
+        if (provider_id != null) { params.put("provider_id", provider_id) }
 
         apiController.post(path, params) { response, error ->
             if(response != null) {
@@ -50,4 +60,5 @@ object LoginService {
             }
         }
     }
+
 }
