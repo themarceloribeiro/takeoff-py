@@ -83,7 +83,7 @@ takeoff-generate android:authentication blog
 And you can also ask for built-in facebook login:
 
 ```
-facebook_auth=true facebook_app_id=XXXXXXXX facebook_scheme=fbXXXXXXXX
+takeoff-generate android:authentication blog facebook_auth=true facebook_app_id=XXXXXXXX facebook_scheme=fbXXXXXXXX
 ```
 
 ## Extra
