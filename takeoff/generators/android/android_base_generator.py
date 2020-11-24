@@ -1,9 +1,9 @@
 import os
 from jinja2 import Template
-from ..generator_base import GeneratorBase
+from ..base_generator import BaseGenerator
 from pathlib import Path
 
-class AndroidBaseGenerator(GeneratorBase):
+class AndroidBaseGenerator(BaseGenerator):
     def __init__(self, name, options):
         super().__init__(name, options)
         self.name = name

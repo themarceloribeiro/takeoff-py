@@ -4,7 +4,7 @@ from jinja2 import Template
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-class GeneratorBase:
+class BaseGenerator:
 
     def __init__(self, name, options):
         self.name = name
@@ -12,6 +12,7 @@ class GeneratorBase:
         self.python = 'python3'
         self.pip = 'pip3'
         self.templates_path = os.path.join(BASE_DIR, 'templates')
+        self.subtype = ''
 
     def setup(self):
         print(f"Setting up: {type(self).__name__}")
@@ -38,6 +39,10 @@ class GeneratorBase:
             return string
 
         return f"{string}s"
+
+    def run(self):
+        self.setup()
+        self.generator().run()
 
     def system_call(self, command):
         os.system(command)
@@ -95,6 +100,20 @@ class GeneratorBase:
 
         for new_line in new_lines:
             lines.insert(len(lines) - 1, f"{new_line}\n")
+
+        with open(destination, 'w') as file:
+            file.writelines(lines)
+
+    def add_lines(self, destination, new_lines, identifier=''):
+        lines = list(open(destination, 'r'))
+
+        if identifier != '':
+            for line in lines:
+                if identifier in line:
+                    return
+
+        for new_line in new_lines:
+            lines.insert(len(lines), f"{new_line}\n")
 
         with open(destination, 'w') as file:
             file.writelines(lines)

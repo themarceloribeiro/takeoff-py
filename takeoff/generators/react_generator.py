@@ -1,6 +1,6 @@
-from .generator_base import GeneratorBase
+from .base_generator import BaseGenerator
 
-class ReactGenerator(GeneratorBase):
+class ReactGenerator(BaseGenerator):
     def __init__(self, name, subtype, options):
         self.name = name
         self.subtype = subtype

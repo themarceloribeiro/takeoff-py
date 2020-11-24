@@ -1,9 +1,9 @@
 import os
 from jinja2 import Template
-from ..generator_base import GeneratorBase
+from ..base_generator import BaseGenerator
 from pathlib import Path
 
-class WebBaseGenerator(GeneratorBase):
+class WebBaseGenerator(BaseGenerator):
     def __init__(self, name, options):
         super().__init__(name, options)
 
@@ -110,7 +110,6 @@ class WebBaseGenerator(GeneratorBase):
 
         with open(settings_file, 'w') as file:
             file.writelines(lines)
-
 
     def add_app(self, app_name):
         settings_file = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/{self.name}/settings.py"

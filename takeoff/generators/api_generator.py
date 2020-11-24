@@ -1,10 +1,17 @@
-from .generator_base import GeneratorBase
+import os
+from jinja2 import Template
+from .base_generator import BaseGenerator
+from .api import *
 
-class ApiGenerator(GeneratorBase):
+class ApiGenerator(BaseGenerator):
     def __init__(self, name, subtype, options):
         self.name = name
         self.subtype = subtype
+        self.options = options
 
-    def run(self):
-        self.setup()
-        print(f"Running API Project Generator: {self.name}")
+    def generator_class_prefix(self):
+        return "Api"
+
+    def generator(self):
+        klass_name = f"{self.generator_class_prefix()}{self.subtype.replace('_', ' ').title()} Generator".replace(' ', '')
+        return eval(f"{klass_name}(self.name, self.options)")
