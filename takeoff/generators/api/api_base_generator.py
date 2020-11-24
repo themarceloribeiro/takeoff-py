@@ -6,6 +6,7 @@ from pathlib import Path
 class ApiBaseGenerator(BaseGenerator):
     def __init__(self, name, options):
         super().__init__(name, options)
+        self.templates_path = f"{self.templates_path}/api"
 
     def project_type(self):
         return 'api'

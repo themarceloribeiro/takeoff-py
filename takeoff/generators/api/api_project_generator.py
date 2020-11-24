@@ -15,6 +15,7 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.create_structure_folders()
         self.create_django_project()
         self.prepare_settings()
+        self.create_main_view()        
         self.prepare_urls()
         self.migrate()
         self.create_admin()
@@ -61,7 +62,7 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.add_lines(destination, settings_lines)
 
     def generate_api_urls(self):
-        template_path = f"{self.templates_path}/api/urls.template"
+        template_path = f"{self.templates_path}/urls.template"
         destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/api/urls.py"
 
         with open(template_path) as f:
@@ -76,3 +77,14 @@ class ApiProjectGenerator(ApiBaseGenerator):
     def prepare_urls(self):
         self.generate_api_urls()
         self.add_app_url_pattern('api', '')
+    
+    def create_main_view(self):
+        views_folder = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/api/views"
+        self.system_call(f"mkdir -p {views_folder}")
+        
+        destination = f"{views_folder}/__init__.py"
+        self.system_call(f"touch {destination}")
+        lines = ["from .main import *"]
+        self.add_lines(destination, lines)
+
+        self.render_template(f"{self.templates_path}/main_view.template", f"{views_folder}/main.py")

@@ -6,6 +6,7 @@ from pathlib import Path
 class WebBaseGenerator(BaseGenerator):
     def __init__(self, name, options):
         super().__init__(name, options)
+        self.templates_path = f"{self.templates_path}/web"
 
     def project_type(self):
         return 'web'
