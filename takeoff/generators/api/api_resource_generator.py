@@ -45,7 +45,6 @@ class ApiResourceGenerator(ApiBaseGenerator):
         ]
 
         for line in lines:
-            print(line)
             for field_type in django_field_types:
                 if f"= {field_type}" in line:
                     attribute_name = line.strip().split("=")[0].strip()
@@ -56,7 +55,7 @@ class ApiResourceGenerator(ApiBaseGenerator):
                     attribute_definition = { 
                         'attribute_name': attribute_name, 
                         'attribute_type': attribute_type,
-                        'attribute_class': attribute_type.replace('models.', '')
+                        'attribute_class': attribute_type.replace('models.', '').replace('TextField', 'CharField')
                     }
                     self.model_attributes.append(attribute_definition)
 
