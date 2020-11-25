@@ -1,3 +1,4 @@
 from .api_project_generator import ApiProjectGenerator
 from .api_model_generator import ApiModelGenerator
 from .api_authentication_generator import ApiAuthenticationGenerator
+from .api_resource_generator import ApiResourceGenerator

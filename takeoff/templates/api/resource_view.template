@@ -1,0 +1,10 @@
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from rest_framework import permissions
+from ..models.{{ generator.model_name }} import {{ generator.camelize(generator.model_name) }}
+from ..serializers.{{ generator.model_name }}_serializer import {{ generator.camelize(generator.model_name) }}Serializer
+
+class {{ generator.camelize(generator.model_name) }}ViewSet(viewsets.ModelViewSet):
+    queryset = {{ generator.camelize(generator.model_name) }}.objects.all().order_by('-created_at')
+    serializer_class = {{ generator.camelize(generator.model_name) }}Serializer
+    permission_classes = [permissions.IsAuthenticated]

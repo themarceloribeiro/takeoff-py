@@ -1,0 +1,24 @@
+from rest_framework import serializers, fields
+from ..models.{{ generator.model_name }} import {{ generator.camelize(generator.model_name) }}
+import datetime
+
+class {{ generator.camelize(generator.model_name) }}Serializer(serializers.Serializer):
+    id = fields.IntegerField(read_only=True)
+    {% for attribute in generator.writeable_attributes() %}
+        {{- attribute['attribute_name']}} = serializers.{{ attribute['attribute_class'] }}()
+    {% endfor %}
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+
+    class Meta:
+        fields = {{ generator.fields_list() }}
+
+    def create(self, validated_data):
+        return {{ generator.camelize(generator.model_name) }}.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        {% for attribute in generator.writeable_attributes() %}
+        instance.{{- attribute['attribute_name']}} = validated_data.get('{{- attribute['attribute_name']}}', instance.{{- attribute['attribute_name']}})
+        {% endfor %}
+        instance.updated_at = datetime.datetime.now()
+        return instance
