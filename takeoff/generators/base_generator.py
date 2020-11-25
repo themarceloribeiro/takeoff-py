@@ -186,7 +186,7 @@ class BaseGenerator:
             elif started and finished:
                 after_lines.append(line)
 
-            if first_pattern in line:
+            if block_start_pattern in line:
                 started = True
 
         all_lines = before_lines + new_lines + after_lines

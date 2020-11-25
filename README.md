@@ -53,6 +53,58 @@ User authentication is also supported by a generator
 takeoff-generate web:authentication blog
 ```
 
+## API: Django REST Framework Support
+
+### New Project
+
+Start by creating a new project. You will be asked for django admin credentials.
+
+```
+takeoff-generate api:project blog
+```
+
+### Generate models
+
+For model generation:
+
+```
+takeoff-generate api:model blog category name:string summary:text
+```
+
+```
+takeoff-generate api:model blog post category:belongs_to title:string summary:text contents:text drafted_at:datetime published:boolean 
+```
+
+### Generate api resources
+
+After your model exists, you can create the api resource (standard REST routes)
+
+```
+takeoff-generate api:resource blog category
+```
+
+```
+takeoff-generate api:resource blog post
+```
+
+### Generate user authentication
+
+User JWT authentication is also supported by a generator
+
+```
+takeoff-generate api:authentication blog
+```
+
+After authentication is generated, you can use the following routes for new tokens, refresh tokens:
+
+```
+curl -X POST -d "username=user&password=pass" http://localhost:8000/tokens/
+```
+
+```
+curl -X POST -d "token=TOKEN" http://localhost:8000/tokens/refresh/
+```
+
 ## Mobile: Android Support
 
 ### New Project

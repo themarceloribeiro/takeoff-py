@@ -20,13 +20,11 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.migrate()
         self.create_admin()
     
-    def migrate(self):
-        self.system_call(f"cd {self.project_folder()} && {self.python} manage.py migrate")
-
-    def install_required_libraries(self):
-        libs = ['django', 'djangorestframework']
-        for lib in libs:
-            self.system_call(f"{self.pip} install {lib}")
+    def required_libraries(self):
+        return [
+            'django', 
+            'djangorestframework'
+        ]
 
     def start_django_project(self):
         self.system_call(f"cd {self.base_dist_folder()}/{self.name}/api && {self.django_admin} startproject {self.name}")
@@ -54,7 +52,7 @@ class ApiProjectGenerator(ApiBaseGenerator):
         settings_lines = [
             "REST_FRAMEWORK = {",
             "    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',",
-            "    'PAGE_SIZE': 10",
+            "    'PAGE_SIZE': 10,",
             "}",
         ]
 

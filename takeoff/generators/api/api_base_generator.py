@@ -11,6 +11,13 @@ class ApiBaseGenerator(BaseGenerator):
     def project_type(self):
         return 'api'
 
+    def migrate(self):
+        self.system_call(f"cd {self.project_folder()} && {self.python} manage.py migrate")
+
+    def install_required_libraries(self):
+        for lib in self.required_libraries():
+            self.system_call(f"{self.pip} install {lib}")
+
     def add_app(self, app_name):
         settings_file = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/{self.name}/settings.py"
         file = open(settings_file, 'r')
@@ -33,6 +40,21 @@ class ApiBaseGenerator(BaseGenerator):
                 finish = index
 
         return finish
+
+    def add_url_line(self, pattern, url_method):
+        urls_file = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/{self.name}/urls.py"
+        file = open(urls_file, 'r')
+        lines = list(file)
+        file.close()
+
+        line = f"    url(r'^{pattern}/',{url_method}),\n"
+
+        if line not in lines:
+            last_line = self.urls_last_line(lines)
+            lines.insert(last_line - 1, line)
+
+        with open(urls_file, 'w') as file:
+            file.writelines(lines)
 
     def add_app_url_pattern(self, app_name, pattern):
         urls_file = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/{self.name}/urls.py"

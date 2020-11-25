@@ -77,7 +77,7 @@ class WebModelGenerator(WebBaseGenerator):
         return switcher.get(type, "default='', max_length=250")
 
     def write_model_file(self):
-        template_path = f"{self.templates_path}/web/model.template"
+        template_path = f"{self.templates_path}/model.template"
         destination_folder = f"{self.project_folder()}/main/models"
         os.system(f"mkdir -p {destination_folder}")
         Path(f"{destination_folder}/__init__.py").touch()
