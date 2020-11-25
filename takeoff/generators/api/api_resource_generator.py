@@ -45,26 +45,20 @@ class ApiResourceGenerator(ApiBaseGenerator):
         ]
 
         for line in lines:
+            print(line)
             for field_type in django_field_types:
                 if f"= {field_type}" in line:
                     attribute_name = line.strip().split("=")[0].strip()
                     attribute_type = line.strip().split("=")[1].strip().split("(")[0].strip()
-                    self.model_attributes.append({ 
+                    if attribute_type == 'models.ForeignKey':
+                        attribute_name = f"{attribute_name}_id"
+                        attribute_type = "models.IntegerField"
+                    attribute_definition = { 
                         'attribute_name': attribute_name, 
                         'attribute_type': attribute_type,
-                        'attribute_class': self.attribute_class(attribute_type)
-                    })
-
-    def attribute_class(self, type):
-        switcher = { 
-            'string': 'CharField', 
-            'text': 'TextField', 
-            'integer': 'IntegerField',
-            'float': 'FloatField',
-            'boolean': 'BooleanField',            
-            'belongs_to': 'ForeignKey',
-        }
-        return switcher.get(type, 'CharField')
+                        'attribute_class': attribute_type.replace('models.', '')
+                    }
+                    self.model_attributes.append(attribute_definition)
 
     def prepare_urls(self):
         destination = f"dist/{self.name}/api/{self.name}/api/urls.py"
