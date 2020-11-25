@@ -53,7 +53,7 @@ class WebProjectGenerator(WebBaseGenerator):
         self.add_setting('LOGOUT_REDIRECT_URL', '/')
 
     def generate_main_urls(self):
-        template_path = f"{self.templates_path}/web/urls.template"
+        template_path = f"{self.templates_path}/urls.template"
         destination = f"{self.base_dist_folder()}/{self.name}/web/{self.name}/main/urls.py"
 
         with open(template_path) as f:
