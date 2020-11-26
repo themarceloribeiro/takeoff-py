@@ -22,4 +22,19 @@ object UserService : RestEntityService() {
         super.create(entity, extra_params)
     }
 
+    fun getUser() {
+        val apiController = getApiController()
+        apiController.userToken = userToken
+        var params = JSONObject()
+
+        apiController.get("/me/", params) { response, error ->
+            if(response != null) {
+                if(delegate() != null) {
+                    delegate()!!.entityFound(response)
+                }
+            } else {
+                handleError("Could not fetch user", response, error)
+            }
+        }
+    }
 }

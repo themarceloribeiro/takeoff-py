@@ -27,7 +27,7 @@ class VolleyService : ServiceInterface {
 
     fun signingToken(): String {
         return if (userToken != null) {
-            userToken!!
+            "JWT ${userToken!!}"
         } else {
             apiToken
         }

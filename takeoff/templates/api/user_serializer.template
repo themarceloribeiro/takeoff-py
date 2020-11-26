@@ -1,0 +1,13 @@
+from rest_framework import serializers, fields
+from django.contrib.auth.models import User
+import datetime
+
+class UserSerializer(serializers.Serializer):
+    id = fields.IntegerField(read_only=True)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
+    email = serializers.CharField(required=False)
+
+    class Meta:
+        fields = ['first_name', 'last_name', 'email', 'username']

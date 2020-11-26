@@ -69,13 +69,15 @@ class AndroidBaseGenerator(BaseGenerator):
         new_line = f"    var {attribute_name} = {attribute_default_value}\n"
         self.add_line_before_pattern(destination, new_line, 'override fun onCreate')
 
-    def add_attribute_to_entity(self, entity_name, attribute_name, attribute_type):
+    def add_attribute_to_entity(self, entity_name, attribute_name, attribute_type, skip_from_json=False, skip_to_json=False):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{entity_name}.kt"
         new_line = f"    var {attribute_name}: {attribute_type}? = null\n"
         self.add_line_before_pattern(destination, new_line, f"constructor() ")
 
-        new_line = f"        {attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"
-        self.add_line_before_pattern(destination, new_line, f"EndFromJson")
+        if not skip_from_json:
+            new_line = f"        {attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"
+            self.add_line_before_pattern(destination, new_line, f"EndFromJson")
 
-        new_line = f"        json.put(\"{attribute_name}\", {attribute_name})\n"
-        self.add_line_before_pattern(destination, new_line, f"EndToJson")
+        if not skip_to_json:
+            new_line = f"        json.put(\"{attribute_name}\", {attribute_name})\n"
+            self.add_line_before_pattern(destination, new_line, f"EndToJson")

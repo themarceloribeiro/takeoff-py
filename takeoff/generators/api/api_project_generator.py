@@ -19,6 +19,7 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.prepare_urls()
         self.migrate()
         self.create_admin()
+        self.gitignore()
     
     def required_libraries(self):
         return [
@@ -86,3 +87,6 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.add_lines(destination, lines)
 
         self.render_template(f"{self.templates_path}/main_view.template", f"{views_folder}/main.py")
+    
+    def gitignore(self):
+        self.render_template(f"{self.templates_path}/.gitignore.template", f"{self.project_folder()}/.gitignore")

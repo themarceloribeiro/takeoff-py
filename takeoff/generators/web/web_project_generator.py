@@ -18,6 +18,7 @@ class WebProjectGenerator(WebBaseGenerator):
         self.prepare_urls()
         self.migrate()
         self.create_admin()
+        self.gitignore()
     
     def migrate(self):
         self.system_call(f"cd {self.project_folder()} && {self.python} manage.py migrate")
@@ -68,3 +69,6 @@ class WebProjectGenerator(WebBaseGenerator):
     def prepare_urls(self):
         self.generate_main_urls()
         self.add_app_url_pattern('main', '')
+    
+    def gitignore(self):
+        self.render_template(f"{self.templates_path}/.gitignore.template", f"{self.project_folder()}/.gitignore")

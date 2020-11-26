@@ -13,6 +13,7 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
         self.install_required_libraries()
         self.set_rest_auth_settings()
         self.set_urls()
+        self.render_templates()
 
     def required_libraries(self):
         return [
@@ -46,8 +47,26 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
         self.add_line_after_pattern(destination, 'import datetime', 'from pathlib import Path')
     
     def set_urls(self):
-        destination = urls_file = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/{self.name}/urls.py"
+        destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/{self.name}/urls.py"
         self.add_url_line('tokens/refresh', 'refresh_jwt_token')
         self.add_url_line('tokens', 'obtain_jwt_token')
         self.add_line_after_pattern(destination, "from django.conf.urls import include, url\n", 'from django.urls import path, include')
         self.add_line_after_pattern(destination, "from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token\n", 'from django.urls import path, include')
+
+        destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/api/urls.py"
+        self.add_line_after_pattern(destination, "from django.urls import path\n", 'from .main import *')
+        self.add_line_after_pattern(destination, "    path('me/', views.user),\n", 'urlpatterns')
+        
+        destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/api/views/__init__.py"
+        self.add_line_after_pattern(destination, "from .user import *\n", 'from .main import *')
+    
+    def render_templates(self):
+        template_path = f"{self.templates_path}/user_view.template"
+        destination = f"{self.project_folder()}/api/views/user.py"
+        self.render_template(template_path, destination)
+
+        destination_folder = f"{self.project_folder()}/api/serializers"
+        os.system(f"mkdir -p {destination_folder}")
+        template_path = f"{self.templates_path}/user_serializer.template"
+        destination = f"{destination_folder}/user_serializer.py"
+        self.render_template(template_path, destination)

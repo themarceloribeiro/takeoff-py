@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import {{ generator.android_prefix }}.services.UserService
 import {{ generator.android_prefix }}.R
 import {{ generator.android_prefix }}.base.BaseFragment
 import {{ generator.android_prefix }}.models.User
@@ -15,6 +16,8 @@ import kotlinx.android.synthetic.main.login_signup_activity.*
 import org.json.JSONObject
 
 class LoginFragment : BaseFragment(), LoginServiceDelegate, RestServiceDelegate {
+
+    var token:String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.login_fragment, container, false)
@@ -43,12 +46,20 @@ class LoginFragment : BaseFragment(), LoginServiceDelegate, RestServiceDelegate 
         service.login(emailField.text.toString(), passwordField.text.toString())
     }
 
-    override fun loggedIn(response: JSONObject?) {
-        var userJson = response!!.get("user") as JSONObject
-        val user = User(activity!!.applicationContext, userJson)
+     override fun loggedIn(response: JSONObject?) {
+        this.token = response!!.get("token") as String
+        var service = UserService
+        service.delegate = this
+        service.userToken = token
+        service.getUser()
+    }
+
+    override fun entityFound(response: JSONObject) {
+        val user = User(activity!!.applicationContext, response!!.get("user") as JSONObject)
+        user.token = this.token
         user.save()
         (activity as LoginSignupActivity).redirectHome()
-    }
+     }
 
     override fun passwordEmailSent(response: JSONObject?) {
     }

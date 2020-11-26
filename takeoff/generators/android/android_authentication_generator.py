@@ -267,9 +267,9 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
         self.add_attribute_to_entity('User', 'first_name', 'String')
         self.add_attribute_to_entity('User', 'last_name', 'String')
         self.add_attribute_to_entity('User', 'email', 'String')
-        self.add_attribute_to_entity('User', 'password', 'String')
-        self.add_attribute_to_entity('User', 'password_confirmation', 'String')
-        self.add_attribute_to_entity('User', 'token', 'String')
+        self.add_attribute_to_entity('User', 'password', 'String', True)
+        self.add_attribute_to_entity('User', 'password_confirmation', 'String', True)
+        self.add_attribute_to_entity('User', 'token', 'String', True, True)
     
     def add_login_strings(self):
         self.add_string_value('login', 'Login')

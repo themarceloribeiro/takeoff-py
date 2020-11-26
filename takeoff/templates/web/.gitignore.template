@@ -1,0 +1,4 @@
+**/__pycache__
+deploy
+build/lib
+.DS_Store
