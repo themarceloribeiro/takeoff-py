@@ -29,6 +29,7 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
             "        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',",
             "        'rest_framework.authentication.SessionAuthentication',",
             "        'rest_framework.authentication.BasicAuthentication',",
+            "        'api.auth.api_authentication.ApiAuthentication',",
             "    ),",
         ])
 
@@ -56,6 +57,7 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
         destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/api/urls.py"
         self.add_line_after_pattern(destination, "from django.urls import path\n", 'from .main import *')
         self.add_line_after_pattern(destination, "    path('me/', views.user),\n", 'urlpatterns')
+        self.add_line_after_pattern(destination, "    path('register/', views.create_user),\n", 'urlpatterns')
         
         destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/api/views/__init__.py"
         self.add_line_after_pattern(destination, "from .user import *\n", 'from .main import *')
@@ -69,4 +71,10 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
         os.system(f"mkdir -p {destination_folder}")
         template_path = f"{self.templates_path}/user_serializer.template"
         destination = f"{destination_folder}/user_serializer.py"
+        self.render_template(template_path, destination)
+
+        destination_folder = f"{self.project_folder()}/api/auth"
+        os.system(f"mkdir -p {destination_folder}")
+        template_path = f"{self.templates_path}/api_authentication.template"
+        destination = f"{destination_folder}/api_authentication.py"
         self.render_template(template_path, destination)

@@ -1,0 +1,15 @@
+from django.contrib.auth.models import User
+from rest_framework import authentication
+from rest_framework import exceptions
+
+class ApiAuthentication(authentication.BaseAuthentication):
+    def authenticate(self, request):
+        api_token = request.META.get('HTTP_AUTHORIZATION')
+        if not api_token or api_token != '4p1s3cr3tp455':
+            raise exceptions.AuthenticationFailed('Bad api token')
+        try:
+            user = User(username='api')
+        except User.DoesNotExist:
+            raise exceptions.AuthenticationFailed('No such user')
+
+        return (user, None)

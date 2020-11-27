@@ -1,9 +1,38 @@
+import jwt
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework import authentication, permissions
+from rest_framework import status
 from rest_framework.decorators import api_view
 from ..serializers.user_serializer import UserSerializer
+from django.contrib.auth.models import User
+from ..auth.api_authentication import ApiAuthentication
+from rest_framework_jwt.utils import jwt_payload_handler
 
 @api_view()
 def user(request):
     return Response({"user": UserSerializer(request.user).data})
+
+@api_view(['POST'])
+@authentication_classes([ApiAuthentication])
+@permission_classes([])
+def create_user(request):
+    data = request.data
+    data['username'] = data['email']
+    serialized = UserSerializer(data=data)
+
+    if serialized.is_valid():
+        user = serialized.create(data)
+        token = create_token(user)
+        serialized_data = UserSerializer(user).data
+        serialized_data['token'] = token
+        return Response({"user": serialized_data, "token": token}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
+def create_token(user):
+    payload = jwt_payload_handler(user)
+    token = jwt.encode(payload, settings.SECRET_KEY)
+    return token.decode('unicode_escape')
