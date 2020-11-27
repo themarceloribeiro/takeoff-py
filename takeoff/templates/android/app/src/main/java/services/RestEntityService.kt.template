@@ -135,9 +135,13 @@ open class RestEntityService {
 
         if (error is VolleyError && error.networkResponse != null && error.networkResponse.data != null) {
             try {
-                var body = String(error.networkResponse.data, Charset.forName("UTF-8"))
-                var json = JSONObject(body)
-                delegate!!.displayError(json.get("message") as String)
+                val responseBody = String(error.networkResponse.data, Charsets.UTF_8)
+                var json = JSONObject(responseBody)
+                var error_message = ""
+                for (key in json.keys()) {
+                    error_message += "- ${key}: ${json.getJSONArray(key).join(", ").replace("\"", "")}\n"
+                }
+                delegate!!.displayError(error_message)
             } catch (e: Exception) {
                 e.printStackTrace()
                 delegate()!!.displayError("Error #5001 " + defaultErrorText)
