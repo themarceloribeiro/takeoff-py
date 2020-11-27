@@ -19,7 +19,7 @@ object UserService : RestEntityService() {
 
     fun create(entity: RestEntity) {
         var extra_params = JSONObject()
-        super.create(entity, extra_params)
+        super.create(entity, extra_params, "/register/")
     }
 
     fun getUser() {

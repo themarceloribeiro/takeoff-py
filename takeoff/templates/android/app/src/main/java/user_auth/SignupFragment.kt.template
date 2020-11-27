@@ -46,7 +46,6 @@ class SignupFragment : BaseFragment(), RestEntityServiceDelegate {
         user.last_name              = lastNameField.text.toString()
         user.email                  = emailField.text.toString()
         user.password               = passwordField.text.toString()
-        user.password_confirmation  = passwordField.text.toString()
 
         var service = UserService
         service.userToken = null

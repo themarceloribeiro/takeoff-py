@@ -1,11 +1,11 @@
-package {{ generator.android_prefix }}.services
+package com.blog.app.services
 
 import android.util.Log
 import com.android.volley.VolleyError
-import {{ generator.android_prefix }}.models.RestEntity
-import {{ generator.android_prefix }}.restclient.ApiController
-import {{ generator.android_prefix }}.services.RestEntityServiceDelegate
-import {{ generator.android_prefix }}.restclient.VolleyService
+import com.blog.app.models.RestEntity
+import com.blog.app.restclient.ApiController
+import com.blog.app.services.RestEntityServiceDelegate
+import com.blog.app.restclient.VolleyService
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URLEncoder
@@ -148,11 +148,10 @@ open class RestEntityService {
         }
     }
 
-    open fun create(entity: RestEntity, extra_params: JSONObject) {
+    open fun create(entity: RestEntity, extra_params: JSONObject, alternate_path: String? =null) {
         var apiController = getApiController()
-        val path = "/${createPath(entity)}.json"
-        val params = extra_params
-        params.put(entity.resourceName(), entity.toJson())
+        val path = alternate_path ?: "/${createPath(entity)}"
+        val params = entity.toJson()
 
         apiController.userToken = userToken
         apiController.post(path, params) { response, error ->
