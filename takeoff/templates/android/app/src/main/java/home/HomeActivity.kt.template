@@ -26,5 +26,6 @@ class HomeActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
     }
 
     fun showDashboard(isFirst: Boolean) {
+        showFragment(DashboardFragment())
     }
 }

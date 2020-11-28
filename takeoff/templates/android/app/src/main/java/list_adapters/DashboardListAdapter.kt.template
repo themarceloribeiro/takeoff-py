@@ -1,0 +1,32 @@
+package {{ generator.android_prefix }}.list_adapters
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import {{ generator.android_prefix }}.R
+
+
+class DashboardListAdapter(context: Context, resource: Int, internal val objects: ArrayList<String>): ArrayAdapter<String>(context, resource, objects) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var actualView: View? = convertView
+        if(actualView == null) {
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            actualView = inflater.inflate(R.layout.string_list_item, parent, false)
+        }
+        val textView = actualView!!.findViewById<TextView>(R.id.list_item_label) as TextView
+        textView.text = objects[position]
+
+        return actualView!!
+    }
+
+    class Holder {
+        var settingsName: TextView? = null
+
+        constructor(view: View) {
+            settingsName = view.findViewById(R.id.list_item_label)
+        }
+    }
+}
