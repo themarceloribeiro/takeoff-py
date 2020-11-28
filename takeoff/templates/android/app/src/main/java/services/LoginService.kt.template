@@ -22,10 +22,14 @@ object LoginService {
         params.put("username", email)
         params.put("password", password)
 
-        if (first_name != null) { params.put("first_name", first_name)  }
-        if (last_name != null) { params.put("last_name", last_name) }
-        if (provider != null) { params.put("provider", provider) }
-        if (provider_id != null) { params.put("provider_id", provider_id) }
+        if (provider != null) {
+            path = "/register/"
+            params.put("email", email)
+            if (first_name != null) { params.put("first_name", first_name)  }
+            if (last_name != null) { params.put("last_name", last_name) }
+            if (provider != null) { params.put("provider", provider) }
+            if (provider_id != null) { params.put("provider_id", provider_id) }
+        }
 
         apiController.post(path, params) { response, error ->
             if(response != null) {

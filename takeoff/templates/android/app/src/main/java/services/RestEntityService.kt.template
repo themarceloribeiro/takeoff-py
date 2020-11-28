@@ -1,11 +1,11 @@
-package com.blog.app.services
+package {{ generator.android_prefix }}.services
 
 import android.util.Log
 import com.android.volley.VolleyError
-import com.blog.app.models.RestEntity
-import com.blog.app.restclient.ApiController
-import com.blog.app.services.RestEntityServiceDelegate
-import com.blog.app.restclient.VolleyService
+import {{ generator.android_prefix }}.models.RestEntity
+import {{ generator.android_prefix }}.restclient.ApiController
+import {{ generator.android_prefix }}.services.RestEntityServiceDelegate
+import {{ generator.android_prefix }}.restclient.VolleyService
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URLEncoder

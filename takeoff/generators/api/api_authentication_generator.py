@@ -14,6 +14,7 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
         self.set_rest_auth_settings()
         self.set_urls()
         self.render_templates()
+        self.make_migrations()
 
     def required_libraries(self):
         return [
@@ -78,3 +79,14 @@ class ApiAuthenticationGenerator(ApiBaseGenerator):
         template_path = f"{self.templates_path}/api_authentication.template"
         destination = f"{destination_folder}/api_authentication.py"
         self.render_template(template_path, destination)
+
+        template_path = f"{self.templates_path}/facebook_user.template"
+        destination = f"{self.project_folder()}/api/models/facebook_user.py"
+        self.render_template(template_path, destination)
+
+        destination = f"{self.project_folder()}/api/models/__init__.py"
+        self.system_call(f"touch {destination}")
+        self.add_line(destination, "from .facebook_user import FacebookUser\n")
+    
+    def make_migrations(self):
+        self.system_call(f"cd {self.project_folder()} && {self.python} manage.py makemigrations")
