@@ -31,7 +31,7 @@ class AndroidBaseGenerator(BaseGenerator):
         self.add_line_before_pattern(destination, f"    implementation '{library}'\n", 'testImplementation')        
 
     def add_import_line(self, destination, new_line):
-        self.add_line_before_pattern(destination, f"import {new_line}\n", 'class ')        
+        self.add_line_before_pattern(destination, f"import {new_line}\n\n", 'class ')
 
     def add_manifest_metadata(self, activity_contents):
         destination = f"{self.project_folder()}/app/src/main/AndroidManifest.xml"

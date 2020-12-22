@@ -3,6 +3,7 @@ package {{ generator.android_prefix }}.home
 import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.view.View
 import {{ generator.android_prefix }}.R
 import {{ generator.android_prefix }}.base.BaseActivity
 
