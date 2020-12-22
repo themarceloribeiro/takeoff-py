@@ -110,6 +110,8 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/res/drawable/ic_launcher_background.xml': 'app/src/main/res/drawable/ic_launcher_background.xml',
             'app/src/main/res/drawable/home.png': 'app/src/main/res/drawable/home.png',
             'app/src/main/res/drawable/home_off.png': 'app/src/main/res/drawable/home_off.png',
+            'app/src/main/res/drawable/unknown.png': 'app/src/main/res/drawable/unknown.png',
+            'app/src/main/res/drawable/unknown_off.png': 'app/src/main/res/drawable/unknown_off.png',            
             'app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml': 'app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml',
             'app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml': 'app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml',
             'app/src/main/res/mipmap-hdpi/ic_launcher.png': 'app/src/main/res/mipmap-hdpi/ic_launcher.png',

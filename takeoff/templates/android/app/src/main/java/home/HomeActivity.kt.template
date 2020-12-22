@@ -10,6 +10,8 @@ class HomeActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_activity)
+        val bottomNavigationView: BottomNavigationView = findViewById<View>(R.id.homeNavigation) as BottomNavigationView
+        bottomNavigationView.setOnNavigationItemSelectedListener(this)
         showDashboard(true)
     }
 

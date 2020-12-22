@@ -1,0 +1,14 @@
+package com.welcomehero.app.{{ generator.pluralize(builder.name.lower()) }}
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.welcomehero.app.R
+import com.welcomehero.app.base.BaseFragment
+
+class {{ builder.name }}Fragment : BaseFragment() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.{{ generator.pluralize(builder.name.lower()) }}_fragment, container, false)
+    }
+}
