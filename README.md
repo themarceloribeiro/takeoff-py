@@ -138,6 +138,16 @@ And you can also ask for built-in facebook login:
 takeoff-generate android:authentication blog facebook_auth=true facebook_app_id=XXXXXXXX facebook_scheme=fbXXXXXXXX
 ```
 
+### Creating Android Components
+
+The upcoming components library will be available for the component generators, with their allowed attributes and settings.
+
+Here is how a new fragment based tab system can be created using android component generator:
+
+```
+takeoff-generate android:component blog tab_screen name=Settings icon=~/Downloads/settings.png 
+```
+
 ## Extra
 
 ### Android Facebook Login
