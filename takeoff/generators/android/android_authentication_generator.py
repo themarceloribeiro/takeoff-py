@@ -28,7 +28,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
                 self.facebook_app_id = option.split('=')[1]
             if 'facebook_scheme' in option:
                 self.facebook_scheme = option.split('=')[1]
-        
+
         if self.facebook_auth and self.validate_facebook_settings():
             self.add_facebook_auth()
 
@@ -59,7 +59,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
         return [
             f"app/src/main/java/{self.android_prefix.replace('.', '/')}/user_auth",
         ]
-    
+
     def main_project_files(self):
         package_path = self.android_prefix.replace('.', '/')
 
@@ -74,7 +74,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
             'app/src/main/res/layout/signup_fragment.xml': f"app/src/main/res/layout/signup_fragment.xml",
             'app/src/main/res/layout/login_signup_activity.xml': f"app/src/main/res/layout/login_signup_activity.xml",
         }
-    
+
     def main_copy_files(self):
         return {
             'app/proguard-rules.pro': 'app/proguard-rules.pro',
@@ -99,7 +99,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
 
         self.add_method_to_class('main/MainActivity.kt', userLoggedIn, 'userLoggedIn')
         self.add_method_to_class('main/MainActivity.kt', presentLogin, 'presentLogin')
-    
+
     def add_application_launched_callback(self):
         lines = ("\n").join([
             "        // UserAuth Check - do not remove",
@@ -111,8 +111,8 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
         ])
 
         self.replace_lines_for_method('main/MainActivity.kt', 'fun applicationDidLaunch', lines)
-    
-    
+
+
     def validate_facebook_settings(self):
         return self.facebook_app_id != None and self.facebook_scheme != None
 
@@ -258,7 +258,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
             '        facebookLoginButton.setReadPermissions(Arrays.asList(SCOPE))',
             '        registerFacebookListeners()',
         ])
-    
+
         self.append_lines_to_method('user_auth/LoginSignupActivity.kt', 'fun onCreate', lines)
 
         print("Facebook Auth OK")
@@ -268,8 +268,8 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
         self.add_attribute_to_entity('User', 'last_name', 'String')
         self.add_attribute_to_entity('User', 'email', 'String')
         self.add_attribute_to_entity('User', 'password', 'String', True)
-        self.add_attribute_to_entity('User', 'token', 'String', False, True)
-    
+        self.add_attribute_to_entity('User', 'token', 'String', False, True, True)
+
     def add_login_strings(self):
         self.add_string_value('login', 'Login')
         self.add_string_value('have_an_account', 'Have an account?')

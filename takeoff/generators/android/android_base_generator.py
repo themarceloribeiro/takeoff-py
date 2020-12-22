@@ -14,11 +14,11 @@ class AndroidBaseGenerator(BaseGenerator):
         for option in options:
             if 'android_prefix' in option:
                 self.android_prefix = option.split('=')[1]
-        
-        if self.android_prefix == '':
-            self.android_prefix = f"com.{self.name}.app"            
 
-        self.product_package = f"{self.android_prefix}.{self.name.replace(' ', '').lower()}"        
+        if self.android_prefix == '':
+            self.android_prefix = f"com.{self.name}.app"
+
+        self.product_package = f"{self.android_prefix}.{self.name.replace(' ', '').lower()}"
 
     def android_sdk_path(self):
         return "/Users/marcelo/Library/Android/sdk"
@@ -28,7 +28,7 @@ class AndroidBaseGenerator(BaseGenerator):
 
     def add_gradle_implementation(self, library):
         destination = f"{self.project_folder()}/app/build.gradle"
-        self.add_line_before_pattern(destination, f"    implementation '{library}'\n", 'testImplementation')        
+        self.add_line_before_pattern(destination, f"    implementation '{library}'\n", 'testImplementation')
 
     def add_import_line(self, destination, new_line):
         self.add_line_before_pattern(destination, f"import {new_line}\n\n", 'class ')
@@ -49,34 +49,42 @@ class AndroidBaseGenerator(BaseGenerator):
         destination = f"{self.project_folder()}/app/src/main/res/values/strings.xml"
         new_line = f"<string name=\"{key}\">{value}</string>\n"
         self.add_line_before_pattern(destination, new_line, '/resources')
-    
+
     def add_method_to_class(self, kotlin_class, method, identifier=''):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
         new_lines = method.split("\n")
         new_lines.append("")
         self.add_lines_before_last_line(destination, new_lines, f"fun {identifier}")
-    
+
     def replace_lines_for_method(self, kotlin_class, method, lines):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
         self.replace_lines_for_block(destination, method, '{', '}', lines)
 
     def append_lines_to_method(self, kotlin_class, method, lines):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{kotlin_class}"
-        self.append_lines_to_block(destination, method, '{', '}', lines)        
+        self.append_lines_to_block(destination, method, '{', '}', lines)
 
     def add_attribute_to_activity(self, activity, attribute_name, attribute_default_value):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/{activity}"
         new_line = f"    var {attribute_name} = {attribute_default_value}\n"
         self.add_line_before_pattern(destination, new_line, 'override fun onCreate')
 
-    def add_attribute_to_entity(self, entity_name, attribute_name, attribute_type, skip_from_json=False, skip_to_json=False):
+    def add_attribute_to_entity(self, entity_name, attribute_name, attribute_type, skip_from_json=False, skip_to_json=False, from_json_unless_nil=False):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{entity_name}.kt"
         new_line = f"    var {attribute_name}: {attribute_type}? = null\n"
         self.add_line_before_pattern(destination, new_line, f"constructor() ")
 
         if not skip_from_json:
-            new_line = f"        {attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"
-            self.add_line_before_pattern(destination, new_line, f"EndFromJson")
+            if from_json_unless_nil:
+                new_lines = [
+                    f"    if(jsonObject.opt{self.camelize(attribute_type)}(\"{attribute_name}\") != null) {'{'}\n",
+                    f"        {attribute_name} = jsonObject.opt{self.camelize(attribute_type)}(\"{attribute_name}\")\n",
+                    "    }\n"
+                ]
+            else:
+                new_lines = [f"        {attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"]
+
+        self.add_line_before_pattern(destination, new_line, f"EndFromJson")
 
         if not skip_to_json:
             new_line = f"        json.put(\"{attribute_name}\", {attribute_name})\n"

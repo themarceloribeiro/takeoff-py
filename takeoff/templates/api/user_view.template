@@ -22,8 +22,12 @@ def user(request):
 def create_user(request):
     data = request.data
     data['username'] = data['email']
-    provider = data.pop('provider')
-    provider_id = data.pop('provider_id')
+    if 'provider' in data.keys():
+        provider = data.pop('provider')
+        provider_id = data.pop('provider_id')
+    else:
+        provider = None
+        provider_id = None
 
     if provider and provider == "facebook":
         facebook_user = get_facebook_user(provider_id, data)
