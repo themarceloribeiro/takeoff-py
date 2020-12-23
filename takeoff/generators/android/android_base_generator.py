@@ -73,18 +73,20 @@ class AndroidBaseGenerator(BaseGenerator):
         destination = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{entity_name}.kt"
         new_line = f"    var {attribute_name}: {attribute_type}? = null\n"
         self.add_line_before_pattern(destination, new_line, f"constructor() ")
-
+        
+        new_lines = []
         if not skip_from_json:
             if from_json_unless_nil:
                 new_lines = [
-                    f"    if(jsonObject.opt{self.camelize(attribute_type)}(\"{attribute_name}\") != null) {'{'}\n",
-                    f"        {attribute_name} = jsonObject.opt{self.camelize(attribute_type)}(\"{attribute_name}\")\n",
-                    "    }\n"
+                    f"        if(jsonObject.opt{self.camelize(attribute_type)}(\"{attribute_name}\") != null) {'{'}\n",
+                    f"            {attribute_name} = jsonObject.opt{self.camelize(attribute_type)}(\"{attribute_name}\")\n",
+                    "        }\n"
                 ]
             else:
                 new_lines = [f"        {attribute_name} = jsonObject.get(\"{attribute_name}\") as {attribute_type}\n"]
 
-        self.add_line_before_pattern(destination, new_line, f"EndFromJson")
+        for new_line in new_lines:
+            self.add_line_before_pattern(destination, new_line, f"EndFromJson")
 
         if not skip_to_json:
             new_line = f"        json.put(\"{attribute_name}\", {attribute_name})\n"

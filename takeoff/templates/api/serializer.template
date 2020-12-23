@@ -1,5 +1,6 @@
 from rest_framework import serializers, fields
 from ..models.{{ generator.model_name }} import {{ generator.camelize(generator.model_name) }}
+from django.utils import timezone
 import datetime
 
 class {{ generator.camelize(generator.model_name) }}Serializer(serializers.Serializer):
@@ -20,5 +21,6 @@ class {{ generator.camelize(generator.model_name) }}Serializer(serializers.Seria
         {% for attribute in generator.writeable_attributes() -%}
         instance.{{- attribute['attribute_name']}} = validated_data.get('{{- attribute['attribute_name']}}', instance.{{- attribute['attribute_name']}})
         {% endfor -%}
-        instance.updated_at = datetime.datetime.now()
+        instance.updated_at = timezone.now()
+        instance.save()
         return instance
