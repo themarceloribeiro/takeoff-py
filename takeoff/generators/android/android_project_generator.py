@@ -18,7 +18,7 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
         for folder in self.main_project_folders():
             fullpath = f"{self.project_folder()}/{folder}"
             print(f"    Creating Android Folder: {fullpath}")
-            os.system(f"mkdir -p {fullpath}")         
+            os.system(f"mkdir -p {fullpath}")
 
     def create_structure_files(self):
         print(f">>> Creating file structure: {self.android_prefix}.{self.name}")
@@ -62,7 +62,7 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             f"app/src/test/java/{self.android_prefix.replace('.', '/')}",
             'gradle/wrapper'
         ]
-    
+
     def main_project_files(self):
         package_path = self.android_prefix.replace('.', '/')
 
@@ -70,7 +70,7 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             '.gitignore': '.gitignore',
             'app/build.gradle': 'app/build.gradle',
             'app/src/androidTest/java/ExampleInstrumentedTest.kt': f"app/src/androidTest/java/{package_path}/ExampleInstrumentedTest.kt",
-            'app/src/test/java/ExampleUnitTest.kt': f"app/src/test/java/{package_path}/ExampleUnitTest.kt",            
+            'app/src/test/java/ExampleUnitTest.kt': f"app/src/test/java/{package_path}/ExampleUnitTest.kt",
             'app/src/main/AndroidManifest.xml': 'app/src/main/AndroidManifest.xml',
             'app/src/main/java/main/MainActivity.kt': f"app/src/main/java/{package_path}/main/MainActivity.kt",
             'app/src/main/java/home/HomeActivity.kt': f"app/src/main/java/{package_path}/home/HomeActivity.kt",
@@ -100,9 +100,9 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/java/restclient/VolleyService.kt': f"app/src/main/java/{package_path}/restclient/VolleyService.kt",
             'app/src/main/java/services/RestEntityService.kt': f"app/src/main/java/{package_path}/services/RestEntityService.kt",
             'app/src/main/java/services/RestEntityServiceDelegate.kt': f"app/src/main/java/{package_path}/services/RestEntityServiceDelegate.kt",
-            'app/src/main/java/services/RestServiceDelegate.kt': f"app/src/main/java/{package_path}/services/RestServiceDelegate.kt",            
+            'app/src/main/java/services/RestServiceDelegate.kt': f"app/src/main/java/{package_path}/services/RestServiceDelegate.kt",
         }
-    
+
     def main_copy_files(self):
         return {
             'app/proguard-rules.pro': 'app/proguard-rules.pro',
@@ -111,7 +111,8 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/res/drawable/home.png': 'app/src/main/res/drawable/home.png',
             'app/src/main/res/drawable/home_off.png': 'app/src/main/res/drawable/home_off.png',
             'app/src/main/res/drawable/unknown.png': 'app/src/main/res/drawable/unknown.png',
-            'app/src/main/res/drawable/unknown_off.png': 'app/src/main/res/drawable/unknown_off.png',            
+            'app/src/main/res/drawable/unknown_off.png': 'app/src/main/res/drawable/unknown_off.png',
+            'app/src/main/res/drawable/vertical_menu.png': 'app/src/main/res/drawable/vertical_menu.png',
             'app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml': 'app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml',
             'app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml': 'app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml',
             'app/src/main/res/mipmap-hdpi/ic_launcher.png': 'app/src/main/res/mipmap-hdpi/ic_launcher.png',
