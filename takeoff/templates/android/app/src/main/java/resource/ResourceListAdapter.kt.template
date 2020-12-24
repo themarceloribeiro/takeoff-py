@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.{{ generator.name.lower() }}s
+package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}s
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,21 +8,21 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.TextView
 import {{ generator.android_prefix }}.R
-import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.name) }}
+import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.entity_name) }}
 
-class {{ generator.camelize(generator.name) }}sListAdapter(context: Context, resource: Int, internal val objects: ArrayList<{{ generator.camelize(generator.name) }}>): ArrayAdapter<{{ generator.camelize(generator.name) }}>(context, resource, objects) {
+class {{ generator.camelize(generator.entity_name) }}sListAdapter(context: Context, resource: Int, internal val objects: ArrayList<{{ generator.camelize(generator.entity_name) }}>): ArrayAdapter<{{ generator.camelize(generator.entity_name) }}>(context, resource, objects) {
 
-    var fragment:{{ generator.camelize(generator.name) }}sListFragment? = null
+    var fragment:{{ generator.camelize(generator.entity_name) }}sListFragment? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var actualView: View? = convertView
         if(actualView == null) {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            actualView = inflater.inflate(R.layout.{{ generator.name.lower() }}_list_item, parent, false)
+            actualView = inflater.inflate(R.layout.{{ generator.entity_name.lower() }}_list_item, parent, false)
         }
-        val textView = actualView!!.findViewById<TextView>(R.id.{{ generator.name.lower() }}_list_item_title) as TextView
-        var {{ generator.name.lower() }} = objects[position] as {{ generator.camelize(generator.name) }}
-        textView.text = {{ generator.name.lower() }}.title
+        val textView = actualView!!.findViewById<TextView>(R.id.{{ generator.entity_name.lower() }}_list_item_title) as TextView
+        var {{ generator.entity_name.lower() }} = objects[position] as {{ generator.camelize(generator.entity_name) }}
+        textView.text = {{ generator.entity_name.lower() }}.title
 
         var button = actualView!!.findViewById<ImageButton>(R.id.menuButton)
         button.setOnClickListener { fragment?.presentMenuForPosition(button, position) }

@@ -1,4 +1,5 @@
 from .android_project_generator import AndroidProjectGenerator
 from .android_entity_generator import AndroidEntityGenerator
+from .android_resource_generator import AndroidResourceGenerator
 from .android_authentication_generator import AndroidAuthenticationGenerator
 from .android_component_generator import AndroidComponentGenerator

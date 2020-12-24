@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/{{ generator.name.lower() }}FormFragment"
+    android:id="@+id/{{ generator.entity_name.lower() }}FormFragment"
     >
 
     <TextView
@@ -31,7 +31,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="10dp"
         app:layout_constraintLeft_toRightOf="parent"
-        android:tooltipText="Enter {{ generator.name.lower() }} title"
+        android:tooltipText="Enter {{ generator.entity_name.lower() }} title"
         />
 
     <TextView
@@ -57,12 +57,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="10dp"
         app:layout_constraintLeft_toRightOf="parent"
-        android:tooltipText="Enter {{ generator.name.lower() }} title"
+        android:tooltipText="Enter {{ generator.entity_name.lower() }} title"
         android:lines="3"
         />
 
     <Button
-        android:id="@+id/save{{ generator.camelize(generator.name) }}Button"
+        android:id="@+id/save{{ generator.camelize(generator.entity_name) }}Button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/purple_500"

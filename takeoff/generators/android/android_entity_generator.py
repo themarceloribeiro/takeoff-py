@@ -1,5 +1,4 @@
 import os
-from jinja2 import Template
 from .android_base_generator import AndroidBaseGenerator
 from pathlib import Path
 from shutil import copyfile
@@ -63,16 +62,6 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             'datetime': 'Date'
         }
         return switcher.get(type, 'String')
-    
-    def write_from_template(self, source, destination):
-        with open(source) as f:
-            template_contents = f.read()
-
-        template = Template(template_contents)
-        contents = template.render(generator=self)
-        
-        with open(destination, 'w') as f:
-            f.write(contents)
 
     def write_entity_file(self):
         package_path = self.android_prefix.replace('.', '/')

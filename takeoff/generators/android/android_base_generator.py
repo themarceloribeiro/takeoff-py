@@ -26,6 +26,16 @@ class AndroidBaseGenerator(BaseGenerator):
     def project_type(self):
         return 'android'
 
+    def write_from_template(self, source, destination):
+        with open(source) as f:
+            template_contents = f.read()
+
+        template = Template(template_contents)
+        contents = template.render(generator=self)
+        
+        with open(destination, 'w') as f:
+            f.write(contents)        
+
     def add_gradle_implementation(self, library):
         destination = f"{self.project_folder()}/app/build.gradle"
         self.add_line_before_pattern(destination, f"    implementation '{library}'\n", 'testImplementation')
