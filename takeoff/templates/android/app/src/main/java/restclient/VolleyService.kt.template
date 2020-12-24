@@ -54,8 +54,14 @@ class VolleyService : ServiceInterface {
                 completionHandler(response, null)
             },
             Response.ErrorListener { error ->
-                Log.i("ERROR", error.toString())
-                completionHandler(null, error)
+                // Python does not send a response for delete
+                if(error.toString().contains("End of input at character 0")) {
+                  Log.i("BLANK RESPONSE", "")
+                  completionHandler(null, null)
+                } else {
+                  Log.i("ERROR", error.toString())
+                  completionHandler(null, error)
+                }
             }) {
 
             @Throws(AuthFailureError::class)

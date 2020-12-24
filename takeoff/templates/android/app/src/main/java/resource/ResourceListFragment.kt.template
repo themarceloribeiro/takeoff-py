@@ -1,0 +1,103 @@
+package {{ generator.android_prefix }}.{{ generator.name.lower() }}s
+
+import android.os.Bundle
+import android.util.Log
+import android.view.*
+import android.widget.AdapterView
+import android.widget.BaseAdapter
+import android.widget.ImageButton
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.base.BaseFragment
+import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.name) }}
+import {{ generator.android_prefix }}.services.{{ generator.camelize(generator.name) }}Service
+import kotlinx.android.synthetic.main.{{ generator.name.lower() }}s_list_fragment.*
+import org.json.JSONArray
+import org.json.JSONObject
+
+
+class {{ generator.camelize(generator.name) }}sListFragment : BaseFragment(), AdapterView.OnItemClickListener {
+
+    var items = ArrayList<{{ generator.camelize(generator.name) }}>()
+    var {{ generator.name.lower() }}ListAdapter:{{ generator.camelize(generator.name) }}sListAdapter? = null
+    var contextMenu{{ generator.camelize(generator.name) }}:{{ generator.camelize(generator.name) }}? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.{{ generator.name.lower() }}s_list_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.{{ generator.name.lower() }}ListAdapter = {{ generator.camelize(generator.name) }}sListAdapter(context!!, R.id.text, items)
+
+        if ({{ generator.name.lower() }}List != null) {
+            {{ generator.name.lower() }}List.adapter = this.{{ generator.name.lower() }}ListAdapter
+            {{ generator.name.lower() }}List.onItemClickListener = this
+        }
+
+        add{{ generator.camelize(generator.name) }}Button.setOnClickListener { showAdd{{ generator.camelize(generator.name) }}() }
+        fetch{{ generator.camelize(generator.name) }}s()
+    }
+
+    fun fetch{{ generator.camelize(generator.name) }}s() {
+        var s = {{ generator.camelize(generator.name) }}Service
+        s.delegate = this
+        s.all(JSONObject("{}"))
+    }
+
+    override fun allFetched(response: JSONObject) {
+        this.items = ArrayList<{{ generator.camelize(generator.name) }}>()
+        var results = response.get("results") as JSONArray
+
+        for (i in 0 until results.length()) {
+            var result = results.getJSONObject(i)
+            var {{ generator.name.lower() }} = {{ generator.camelize(generator.name) }}(result)
+            this.items.add({{ generator.name.lower() }})
+        }
+        this.{{ generator.name.lower() }}ListAdapter = {{ generator.camelize(generator.name) }}sListAdapter(context!!, R.id.text, items)
+        this.{{ generator.name.lower() }}ListAdapter!!.fragment = this
+        {{ generator.name.lower() }}List.adapter = this.{{ generator.name.lower() }}ListAdapter
+        {{ generator.name.lower() }}List.onItemClickListener = this
+        ({{ generator.name.lower() }}List.adapter as BaseAdapter).notifyDataSetChanged()
+    }
+
+    fun showAdd{{ generator.camelize(generator.name) }}() {
+        baseActivity?.showFragment({{ generator.camelize(generator.name) }}FormFragment())
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        Log.i("CLICK", "Clicked Position ${position}")
+    }
+
+    fun presentMenuForPosition(button: ImageButton, position: Int) {
+        registerForContextMenu(button)
+        button.showContextMenu(10.0F, 10.0F)
+        contextMenu{{ generator.camelize(generator.name) }} = this.items.get(position)
+    }
+
+    override fun onCreateContextMenu( menu: ContextMenu,  v: View,  menuInfo: ContextMenu.ContextMenuInfo?) {
+        menu.add("Edit")
+        menu.add("Delete")
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        if(item.toString() == "Edit") {
+            var fragment = {{ generator.camelize(generator.name) }}FormFragment()
+            fragment.{{ generator.name.lower() }} = contextMenu{{ generator.camelize(generator.name) }}!!
+            this.homeActivity().showFragment(fragment)
+        } else if (item.toString() == "Delete") {
+            var s = {{ generator.camelize(generator.name) }}Service
+            s.delegate = this
+            s.delete(contextMenu{{ generator.camelize(generator.name) }}!!)
+        }
+
+        return true
+    }
+
+    override fun entityDeleted(response: JSONObject) {
+        fetch{{ generator.camelize(generator.name) }}s()
+    }
+}

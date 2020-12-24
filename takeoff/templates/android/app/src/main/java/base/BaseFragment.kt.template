@@ -14,6 +14,7 @@ import org.json.JSONObject
 
 open class BaseFragment : Fragment(), RestEntityServiceDelegate {
 
+    var baseActivity: BaseActivity? = null
     var tabId = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

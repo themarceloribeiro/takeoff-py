@@ -1,0 +1,57 @@
+package {{ generator.android_prefix }}.{{ generator.name.lower() }}s
+
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.base.BaseFragment
+import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.name) }}
+import {{ generator.android_prefix }}.services.{{ generator.camelize(generator.name) }}Service
+import kotlinx.android.synthetic.main.{{ generator.name.lower() }}_form_fragment.*
+import org.json.JSONObject
+
+class {{ generator.camelize(generator.name) }}FormFragment : BaseFragment() {
+    var {{ generator.name.lower() }}: {{ generator.camelize(generator.name) }} = {{ generator.camelize(generator.name) }}()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.{{ generator.name.lower() }}_form_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        save{{ generator.camelize(generator.name) }}Button.setOnClickListener { save{{ generator.camelize(generator.name) }}() }
+
+        if({{ generator.name.lower() }}.remote_id != null) {
+            titleField.setText({{ generator.name.lower() }}.title, TextView.BufferType.EDITABLE);
+            summaryField.setText({{ generator.name.lower() }}.summary, TextView.BufferType.EDITABLE);
+        }
+    }
+
+    fun save{{ generator.camelize(generator.name) }}() {
+        this.{{ generator.name.lower() }}.title = titleField.text.toString()
+        this.{{ generator.name.lower() }}.summary = summaryField.text.toString()
+
+        var m = {{ generator.camelize(generator.name) }}Service
+        m.delegate = this
+
+        if (this.{{ generator.name.lower() }}.remote_id == null) {
+            m.create(this.{{ generator.name.lower() }}, JSONObject("{}"))
+        } else {
+            m.update(this.{{ generator.name.lower() }})
+        }
+    }
+
+    override fun entityCreated(response: JSONObject) {
+        this.{{ generator.name.lower() }} = {{ generator.camelize(generator.name) }}(response)
+        this.baseActivity!!.onBackPressed()
+    }
+
+    override fun entityUpdated(response: JSONObject) {
+        this.{{ generator.name.lower() }} = {{ generator.camelize(generator.name) }}(response)
+        this.baseActivity!!.onBackPressed()
+    }
+
+}

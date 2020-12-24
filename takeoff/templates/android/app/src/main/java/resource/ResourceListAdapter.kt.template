@@ -1,0 +1,40 @@
+package {{ generator.android_prefix }}.{{ generator.name.lower() }}s
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageButton
+import android.widget.TextView
+import {{ generator.android_prefix }}.R
+import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.name) }}
+
+class {{ generator.camelize(generator.name) }}sListAdapter(context: Context, resource: Int, internal val objects: ArrayList<{{ generator.camelize(generator.name) }}>): ArrayAdapter<{{ generator.camelize(generator.name) }}>(context, resource, objects) {
+
+    var fragment:{{ generator.camelize(generator.name) }}sListFragment? = null
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var actualView: View? = convertView
+        if(actualView == null) {
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            actualView = inflater.inflate(R.layout.{{ generator.name.lower() }}_list_item, parent, false)
+        }
+        val textView = actualView!!.findViewById<TextView>(R.id.{{ generator.name.lower() }}_list_item_title) as TextView
+        var {{ generator.name.lower() }} = objects[position] as {{ generator.camelize(generator.name) }}
+        textView.text = {{ generator.name.lower() }}.title
+
+        var button = actualView!!.findViewById<ImageButton>(R.id.menuButton)
+        button.setOnClickListener { fragment?.presentMenuForPosition(button, position) }
+
+        return actualView!!
+    }
+
+    class Holder {
+        var settingsName: TextView? = null
+
+        constructor(view: View) {
+            settingsName = view.findViewById(R.id.list_item_label)
+        }
+    }
+}

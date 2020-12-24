@@ -97,6 +97,7 @@ open class BaseActivity :  AppCompatActivity(), RestEntityServiceDelegate {
     }
 
     fun showFragment(fragment: BaseFragment, isFirst: Boolean) {
+        fragment.baseActivity = this
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.homeContainer, fragment)
         if(!isFirst) {  ft.addToBackStack(null)  }
