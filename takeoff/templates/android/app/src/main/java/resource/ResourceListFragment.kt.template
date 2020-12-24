@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}s
+package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}
 
 import android.os.Bundle
 import android.util.Log
@@ -10,15 +10,15 @@ import {{ generator.android_prefix }}.R
 import {{ generator.android_prefix }}.base.BaseFragment
 import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.entity_name) }}
 import {{ generator.android_prefix }}.services.{{ generator.camelize(generator.entity_name) }}Service
-import kotlinx.android.synthetic.main.{{ generator.entity_name.lower() }}s_list_fragment.*
+import kotlinx.android.synthetic.main.{{ generator.entity_name.lower() }}_list_fragment.*
 import org.json.JSONArray
 import org.json.JSONObject
 
 
-class {{ generator.camelize(generator.entity_name) }}sListFragment : BaseFragment(), AdapterView.OnItemClickListener {
+class {{ generator.camelize(generator.entity_name) }}ListFragment : BaseFragment(), AdapterView.OnItemClickListener {
 
     var items = ArrayList<{{ generator.camelize(generator.entity_name) }}>()
-    var {{ generator.entity_name.lower() }}ListAdapter:{{ generator.camelize(generator.entity_name) }}sListAdapter? = null
+    var {{ generator.entity_name.lower() }}ListAdapter:{{ generator.camelize(generator.entity_name) }}ListAdapter? = null
     var contextMenu{{ generator.camelize(generator.entity_name) }}:{{ generator.camelize(generator.entity_name) }}? = null
 
     override fun onCreateView(
@@ -26,12 +26,12 @@ class {{ generator.camelize(generator.entity_name) }}sListFragment : BaseFragmen
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.{{ generator.entity_name.lower() }}s_list_fragment, container, false)
+        return inflater.inflate(R.layout.{{ generator.entity_name.lower() }}_list_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.{{ generator.entity_name.lower() }}ListAdapter = {{ generator.camelize(generator.entity_name) }}sListAdapter(context!!, R.id.text, items)
+        this.{{ generator.entity_name.lower() }}ListAdapter = {{ generator.camelize(generator.entity_name) }}ListAdapter(context!!, R.id.text, items)
 
         if ({{ generator.entity_name.lower() }}List != null) {
             {{ generator.entity_name.lower() }}List.adapter = this.{{ generator.entity_name.lower() }}ListAdapter
@@ -57,7 +57,7 @@ class {{ generator.camelize(generator.entity_name) }}sListFragment : BaseFragmen
             var {{ generator.entity_name.lower() }} = {{ generator.camelize(generator.entity_name) }}(result)
             this.items.add({{ generator.entity_name.lower() }})
         }
-        this.{{ generator.entity_name.lower() }}ListAdapter = {{ generator.camelize(generator.entity_name) }}sListAdapter(context!!, R.id.text, items)
+        this.{{ generator.entity_name.lower() }}ListAdapter = {{ generator.camelize(generator.entity_name) }}ListAdapter(context!!, R.id.text, items)
         this.{{ generator.entity_name.lower() }}ListAdapter!!.fragment = this
         {{ generator.entity_name.lower() }}List.adapter = this.{{ generator.entity_name.lower() }}ListAdapter
         {{ generator.entity_name.lower() }}List.onItemClickListener = this

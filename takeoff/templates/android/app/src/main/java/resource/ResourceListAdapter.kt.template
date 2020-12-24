@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}s
+package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import android.widget.TextView
 import {{ generator.android_prefix }}.R
 import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.entity_name) }}
 
-class {{ generator.camelize(generator.entity_name) }}sListAdapter(context: Context, resource: Int, internal val objects: ArrayList<{{ generator.camelize(generator.entity_name) }}>): ArrayAdapter<{{ generator.camelize(generator.entity_name) }}>(context, resource, objects) {
+class {{ generator.camelize(generator.entity_name) }}ListAdapter(context: Context, resource: Int, internal val objects: ArrayList<{{ generator.camelize(generator.entity_name) }}>): ArrayAdapter<{{ generator.camelize(generator.entity_name) }}>(context, resource, objects) {
 
-    var fragment:{{ generator.camelize(generator.entity_name) }}sListFragment? = null
+    var fragment:{{ generator.camelize(generator.entity_name) }}ListFragment? = null
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var actualView: View? = convertView

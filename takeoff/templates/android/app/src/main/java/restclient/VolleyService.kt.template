@@ -50,18 +50,10 @@ class VolleyService : ServiceInterface {
 
         val jsonObjReq = object : JsonObjectRequest(Method.GET, basePath + path + sb.toString(), params,
             Response.Listener<JSONObject> { response ->
-                Log.i("RESPONSE", response.toString())
                 completionHandler(response, null)
             },
             Response.ErrorListener { error ->
-                // Python does not send a response for delete
-                if(error.toString().contains("End of input at character 0")) {
-                  Log.i("BLANK RESPONSE", "")
-                  completionHandler(null, null)
-                } else {
-                  Log.i("ERROR", error.toString())
-                  completionHandler(null, error)
-                }
+                completionHandler(null, error)
             }) {
 
             @Throws(AuthFailureError::class)
@@ -159,7 +151,11 @@ class VolleyService : ServiceInterface {
                 completionHandler(response, null)
             },
             Response.ErrorListener { error ->
-                completionHandler(null, error)
+                if(error.toString().contains("End of input at character 0 of")) {
+                    completionHandler(null, null)
+                } else {
+                    completionHandler(null, error)
+                }
             }) {
 
             @Throws(AuthFailureError::class)

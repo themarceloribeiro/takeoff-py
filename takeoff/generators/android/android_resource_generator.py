@@ -21,6 +21,7 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         package_path = self.android_prefix.replace('.', '/')
         template_path = f"{self.templates_path}/app/src/main/java/resource/ResourceFormFragment.kt.template"
         destination_folder = f"{self.project_folder()}/app/src/main/java/{package_path}/{self.entity_name}"
+        os.system(f"mkdir -p {destination_folder}")
         destination = f"{destination_folder}/{self.camelize(self.entity_name)}FormFragment.kt"
         self.write_from_template(template_path, destination)
 
@@ -29,7 +30,7 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         xml_destination = f"{xml_destination_folder}/{self.entity_name.lower()}_form_fragment.xml"
         self.write_from_template(xml_template_path, xml_destination)
 
-    def render_resource_form_fragment(self):
+    def render_resource_list_fragment(self):
         package_path = self.android_prefix.replace('.', '/')
         template_path = f"{self.templates_path}/app/src/main/java/resource/ResourceListFragment.kt.template"
         destination_folder = f"{self.project_folder()}/app/src/main/java/{package_path}/{self.entity_name}"

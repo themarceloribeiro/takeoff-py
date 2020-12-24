@@ -195,7 +195,7 @@ open class RestEntityService {
 
         apiController.userToken = userToken
         apiController.delete("${updatePath(entity)}/", params) { response, error ->
-            if(response != null) {
+            if(response != null || error == null) {
                 if(delegate() != null) {
                     delegate()!!.entityDeleted(JSONObject("{}"))
                 }

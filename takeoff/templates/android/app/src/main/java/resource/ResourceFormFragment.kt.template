@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}s
+package {{ generator.android_prefix }}.{{ generator.entity_name.lower() }}
 
 import android.os.Bundle
 import android.util.Log
