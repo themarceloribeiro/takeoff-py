@@ -8,6 +8,7 @@ open class DateTimeHelper {
 
     val sdfDateTimeHelper   = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     val sdfDateTimeHelper2  = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+    val fromString  = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
     fun readDate(json: JSONObject, field: String): Date? {
         if(!json.has(field) || json.getString(field) == "null" || json.getString(field) == "") {
@@ -28,6 +29,21 @@ open class DateTimeHelper {
         }
 
         return sdfDateTimeHelper.parse(stringValue)
+    }
+
+    fun fromString(stringValue: String?): Date? {
+        if (stringValue == null || stringValue.equals("null") ||  stringValue == "") {
+            return null
+        }
+
+        return fromString.parse(stringValue)
+    }
+
+    fun toString(dateValue: Date?) {
+        if(dateValue == null) {
+            return ""
+        }
+        return fromString.format(dateValue)
     }
 
     fun readLongDate(longValue: Long?): Date? {

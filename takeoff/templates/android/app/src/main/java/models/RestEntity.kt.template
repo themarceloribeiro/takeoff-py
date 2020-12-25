@@ -8,3 +8,18 @@ interface RestEntity {
     fun resourcePlural(): String
     fun toJson(): JSONObject
 }
+
+fun String.toDate(): Date? {
+    var dateTimeHelper = DateTimeHelper()
+    return dateTimeHelper.fromString(this)
+}
+
+fun Date.toDateString(): String {
+    var dateTimeHelper = DateTimeHelper()
+    var dateString = dateTimeHelper.toString(this)
+    if (dateString != null) {
+        return dateString
+    } else {
+        return ""
+    }
+}

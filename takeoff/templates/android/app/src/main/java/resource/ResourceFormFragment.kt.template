@@ -10,6 +10,8 @@ import {{ generator.android_prefix }}.R
 import {{ generator.android_prefix }}.base.BaseFragment
 import {{ generator.android_prefix }}.models.{{ generator.camelize(generator.entity_name) }}
 import {{ generator.android_prefix }}.services.{{ generator.camelize(generator.entity_name) }}Service
+import {{ generator.android_prefix }}.models.toDate
+import {{ generator.android_prefix }}.models.toDateString
 import kotlinx.android.synthetic.main.{{ generator.entity_name.lower() }}_form_fragment.*
 import org.json.JSONObject
 
@@ -25,14 +27,16 @@ class {{ generator.camelize(generator.entity_name) }}FormFragment : BaseFragment
         save{{ generator.camelize(generator.entity_name) }}Button.setOnClickListener { save{{ generator.camelize(generator.entity_name) }}() }
 
         if({{ generator.entity_name.lower() }}.remote_id != null) {
-            titleField.setText({{ generator.entity_name.lower() }}.title, TextView.BufferType.EDITABLE);
-            summaryField.setText({{ generator.entity_name.lower() }}.summary, TextView.BufferType.EDITABLE);
+            {% for attribute in generator.entity_attributes -%}
+            {{ attribute['attribute_name'] }}Field.setText({{ generator.entity_name.lower() }}.{{ attribute['attribute_name'] }}{{ attribute['to_string_modifier'] }}, TextView.BufferType.EDITABLE);
+            {% endfor %}
         }
     }
 
     fun save{{ generator.camelize(generator.entity_name) }}() {
-        this.{{ generator.entity_name.lower() }}.title = titleField.text.toString()
-        this.{{ generator.entity_name.lower() }}.summary = summaryField.text.toString()
+        {% for attribute in generator.entity_attributes -%}
+        this.{{ generator.entity_name.lower() }}.{{ attribute['attribute_name'] }} = {{ attribute['attribute_name'] }}Field.text.toString(){{ attribute['from_string_modifier'] }}
+        {% endfor %}
 
         var m = {{ generator.camelize(generator.entity_name) }}Service
         m.delegate = this
