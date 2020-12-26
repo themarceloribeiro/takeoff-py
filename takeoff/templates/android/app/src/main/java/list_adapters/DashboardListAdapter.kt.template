@@ -21,12 +21,4 @@ class DashboardListAdapter(context: Context, resource: Int, internal val objects
 
         return actualView!!
     }
-
-    class Holder {
-        var settingsName: TextView? = null
-
-        constructor(view: View) {
-            settingsName = view.findViewById(R.id.list_item_label)
-        }
-    }
 }

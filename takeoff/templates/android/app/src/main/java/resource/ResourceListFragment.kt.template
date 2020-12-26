@@ -69,7 +69,10 @@ class {{ generator.camelize(generator.entity_name) }}ListFragment : BaseFragment
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Log.i("CLICK", "Clicked Position ${position}")
+        var {{ generator.entity_name.lower() }} = this.items[position]
+        var f = {{ generator.camelize(generator.entity_name) }}Fragment()
+        f.{{ generator.entity_name.lower() }} = {{ generator.entity_name.lower() }}
+        this.homeActivity().showFragment(f)
     }
 
     fun presentMenuForPosition(button: ImageButton, position: Int) {

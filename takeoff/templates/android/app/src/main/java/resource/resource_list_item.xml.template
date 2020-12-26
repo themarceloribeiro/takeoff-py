@@ -6,6 +6,7 @@
     android:layout_height="50dp"
     android:orientation="vertical"
     android:id="@+id/{{ generator.entity_name.lower() }}_list_item_layout"
+    android:descendantFocusability="blocksDescendants"
     >
 
     <ImageButton

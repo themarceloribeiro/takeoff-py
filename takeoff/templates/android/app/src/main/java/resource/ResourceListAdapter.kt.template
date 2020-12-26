@@ -29,12 +29,4 @@ class {{ generator.camelize(generator.entity_name) }}ListAdapter(context: Contex
 
         return actualView!!
     }
-
-    class Holder {
-        var settingsName: TextView? = null
-
-        constructor(view: View) {
-            settingsName = view.findViewById(R.id.list_item_label)
-        }
-    }
 }

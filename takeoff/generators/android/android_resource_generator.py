@@ -15,6 +15,7 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         self.setup()
         print(f">>> Running Android Resource Generator: {self.entity_name}")
         self.load_resource_attributes()
+        self.render_resource_fragment()
         self.render_resource_form_fragment()
         self.render_resource_list_fragment()
         self.render_resource_list_adapter()
@@ -66,6 +67,19 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
             'Date': 'EditText'
         }
         return types.get(attribute_type)
+
+    def render_resource_fragment(self):
+        package_path = self.android_prefix.replace('.', '/')
+        template_path = f"{self.templates_path}/app/src/main/java/resource/ResourceFragment.kt.template"
+        destination_folder = f"{self.project_folder()}/app/src/main/java/{package_path}/{self.entity_name}"
+        os.system(f"mkdir -p {destination_folder}")
+        destination = f"{destination_folder}/{self.camelize(self.entity_name)}Fragment.kt"
+        self.write_from_template(template_path, destination)
+
+        xml_template_path = f"{self.templates_path}/app/src/main/java/resource/resource_fragment.xml.template"
+        xml_destination_folder = f"{self.project_folder()}/app/src/main/res/layout"
+        xml_destination = f"{xml_destination_folder}/{self.entity_name.lower()}_fragment.xml"
+        self.write_from_template(xml_template_path, xml_destination)
 
     def render_resource_form_fragment(self):
         package_path = self.android_prefix.replace('.', '/')
