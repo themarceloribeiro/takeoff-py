@@ -19,14 +19,14 @@ class {{ generator.camelize(generator.entity_name) }}Fragment : BaseFragment() {
     var {{ generator.entity_name.lower() }}: {{ generator.camelize(generator.entity_name) }} = {{ generator.camelize(generator.entity_name) }}()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.{{ generator.entity_name.lower() }}_form_fragment, container, false)
+        return inflater.inflate(R.layout.{{ generator.entity_name.lower() }}_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         {% for attribute in generator.entity_attributes -%}
-        {{ attribute['attribute_name'] }}Field.setText({{ generator.entity_name.lower() }}.{{ attribute['attribute_name'] }}{{ attribute['to_string_modifier'] }}, TextView.BufferType.EDITABLE);
+        {{ attribute['attribute_name'] }}Value.text = {{ generator.entity_name.lower() }}.{{ attribute['attribute_name'] }}{{ attribute['to_string_modifier'] }}
         {% endfor %}
     }
 }

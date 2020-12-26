@@ -20,7 +20,7 @@
         android:text="{{ generator.titleize(attribute['attribute_name']) }}"
         />
 
-    <{{- attribute['field_type']}}
+    <TextView
         android:id="@+id/{{ attribute['attribute_name'] }}Value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

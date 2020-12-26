@@ -39,7 +39,7 @@ open class DateTimeHelper {
         return fromString.parse(stringValue)
     }
 
-    fun toString(dateValue: Date?) {
+    fun toString(dateValue: Date?): String {
         if(dateValue == null) {
             return ""
         }

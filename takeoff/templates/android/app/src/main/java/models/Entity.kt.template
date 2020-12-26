@@ -2,7 +2,6 @@ package {{ generator.android_prefix }}.models
 
 import org.json.JSONObject
 import java.util.Date
-import {{ generator.android_prefix }}.toDate
 import {{ generator.android_prefix }}.models.helpers.DateTimeHelper
 
 open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
