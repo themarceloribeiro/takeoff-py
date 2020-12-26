@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.home
+package com.welcomehero.app.home
 
 import android.os.Bundle
 import android.util.Log
@@ -6,13 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import {{ generator.android_prefix }}.R
-import {{ generator.android_prefix }}.base.BaseFragment
-import {{ generator.android_prefix }}.list_adapters.DashboardListAdapter
+import com.welcomehero.app.R
+import com.welcomehero.app.base.BaseFragment
+import com.welcomehero.app.list_adapters.DashboardListAdapter
+import com.welcomehero.app.task.TaskListFragment
 import kotlinx.android.synthetic.main.dashboard_fragment.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class DashboardFragment : BaseFragment(), AdapterView.OnItemClickListener {
-    val items = ArrayList<String>()
+
+    var fragments: Map<String, BaseFragment> = mapOf(
+        // StartFragments
+        // FinishFragments
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.dashboard_fragment, container, false)
@@ -20,8 +28,8 @@ class DashboardFragment : BaseFragment(), AdapterView.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        items.add("Dashboard")
-        val customAdapter = DashboardListAdapter(context!!, R.id.text, items)
+        var titles = ArrayList<String>(fragments.keys)
+        val customAdapter = DashboardListAdapter(context!!, R.id.text, titles)
 
         if (dashboardList != null) {
             dashboardList.adapter = customAdapter
@@ -30,6 +38,9 @@ class DashboardFragment : BaseFragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Log.i("CLICK", "Clicked Position ${position}")
+        var titles = ArrayList<String>(fragments.keys)
+        var title = titles[position]
+        var fragment = fragments[title]
+        this.homeActivity().showFragment(fragment!!)
     }
 }

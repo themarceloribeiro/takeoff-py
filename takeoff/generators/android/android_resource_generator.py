@@ -19,6 +19,7 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         self.render_resource_form_fragment()
         self.render_resource_list_fragment()
         self.render_resource_list_adapter()
+        self.add_dashboard_access()
     
     def load_resource_attributes(self):
         entity_file = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{self.entity_name}.kt"
@@ -117,3 +118,11 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         destination_folder = f"{self.project_folder()}/app/src/main/java/{package_path}/{self.entity_name}"
         destination = f"{destination_folder}/{self.camelize(self.entity_name)}ListAdapter.kt"
         self.write_from_template(template_path, destination)
+    
+    def add_dashboard_access(self):
+        package_path = self.android_prefix.replace('.', '/')
+        line = f"       \"{self.camelize(self.entity_name)}\" to {self.camelize(self.entity_name)}ListFragment(),\n"
+        pattern = "FinishFragments"
+        destination = f"{self.project_folder()}/app/src/main/java/{package_path}/home/DashboardFragment.kt"
+        self.add_line_before_pattern(destination, line, pattern)
+        self.add_import_line(destination, f"{self.android_prefix}.{self.entity_name.lower()}.{self.camelize(self.entity_name)}Fragment")

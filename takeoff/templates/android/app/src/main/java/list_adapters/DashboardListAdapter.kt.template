@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.list_adapters
+package com.welcomehero.app.list_adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import {{ generator.android_prefix }}.R
+import com.welcomehero.app.R
+import com.welcomehero.app.base.BaseFragment
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class DashboardListAdapter(context: Context, resource: Int, internal val objects: ArrayList<String>): ArrayAdapter<String>(context, resource, objects) {
