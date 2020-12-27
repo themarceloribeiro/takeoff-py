@@ -125,4 +125,4 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         pattern = "FinishFragments"
         destination = f"{self.project_folder()}/app/src/main/java/{package_path}/home/DashboardFragment.kt"
         self.add_line_before_pattern(destination, line, pattern)
-        self.add_import_line(destination, f"{self.android_prefix}.{self.entity_name.lower()}.{self.camelize(self.entity_name)}Fragment")
+        self.add_import_line(destination, f"{self.android_prefix}.{self.entity_name.lower()}.{self.camelize(self.entity_name)}ListFragment")

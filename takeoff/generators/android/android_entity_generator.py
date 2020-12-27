@@ -39,8 +39,6 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
                     'class_name': self.camelize(parts[0])
                 })
 
-                self.add_import_line(f"{self.android_prefix}.{self.camelize(parts[0])}")
-        
         self.entity_attributes.append({
             'name': 'created_at',
             'type': 'datetime',

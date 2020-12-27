@@ -9,7 +9,6 @@ import android.widget.AdapterView
 import com.welcomehero.app.R
 import com.welcomehero.app.base.BaseFragment
 import com.welcomehero.app.list_adapters.DashboardListAdapter
-import com.welcomehero.app.task.TaskListFragment
 import kotlinx.android.synthetic.main.dashboard_fragment.*
 import java.util.*
 import kotlin.collections.ArrayList

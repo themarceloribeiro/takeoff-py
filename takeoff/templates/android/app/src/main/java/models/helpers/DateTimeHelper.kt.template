@@ -1,4 +1,4 @@
-package {{ generator.android_prefix }}.models.helpers;
+package com.welcomehero.app.models.helpers;
 
 import org.json.JSONObject;
 import java.text.SimpleDateFormat
@@ -6,7 +6,7 @@ import java.util.*
 
 open class DateTimeHelper {
 
-    val sdfDateTimeHelper   = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    val sdfDateTimeHelper   = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
     val sdfDateTimeHelper2  = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
     val fromString  = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
@@ -15,12 +15,12 @@ open class DateTimeHelper {
             return null
         }
         val parser = if(json.getString(field).contains("Z")) {
-            sdfDateTimeHelper.timeZone = TimeZone.getTimeZone("UTC")
-            sdfDateTimeHelper
+            fromString.timeZone = TimeZone.getTimeZone("UTC")
+            fromString
         } else {
             sdfDateTimeHelper2
         }
-        return Date(parser.parse(json.getString(field)).time)
+        return Date(parser.parse(json.getString(field).replace('T', ' ')).time)
     }
 
     fun readDate(stringValue: String?): Date? {
