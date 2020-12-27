@@ -109,6 +109,12 @@ curl -X POST -d "username=user&password=pass" http://localhost:8000/tokens/
 curl -X POST -d "token=TOKEN" http://localhost:8000/tokens/refresh/
 ```
 
+And make authorized requests using the JWT:
+
+```
+curl -X GET -H 'Content-Type: application/json' -H 'Authorization: JWT [TOKEN]' -i 'http://localhost:8000/me/'
+```
+
 ## Mobile: Android Support
 
 ### New Project
