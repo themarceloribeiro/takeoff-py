@@ -30,7 +30,7 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             self.entity_attributes.append({
                 'name': parts[0], 
                 'type': parts[1], 
-                'class': self.attribute_class(parts[1])
+                'class': self.attribute_class(parts[1], parts[0])
             })
 
             if parts[1] == 'belongs_to':
@@ -38,6 +38,8 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
                     'name': parts[0], 
                     'class_name': self.camelize(parts[0])
                 })
+
+                self.add_import_line(f"{self.android_prefix}.{self.camelize(parts[0])}")
         
         self.entity_attributes.append({
             'name': 'created_at',
@@ -51,7 +53,7 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             'class': 'Date'
         })
 
-    def attribute_class(self, type):
+    def attribute_class(self, type, attribute_name=None):
         switcher = { 
             'string': 'String',
             'text': 'String',
@@ -59,7 +61,8 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             'float': 'Float',
             'boolean': 'Boolean',
             'date': 'Date',
-            'datetime': 'Date'
+            'datetime': 'Date',
+            'belongs_to': self.camelize(attribute_name)
         }
         return switcher.get(type, 'String')
 
