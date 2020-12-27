@@ -26,12 +26,17 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             parts = attribute.split(':')
             if len(parts) == 1:
                 parts.append('string')
-
-            self.entity_attributes.append({
+            is_association = False
+            if parts[1] == 'belongs_to':
+                is_association = True
+            
+            attributes = {
                 'name': parts[0], 
                 'type': parts[1], 
-                'class': self.attribute_class(parts[1], parts[0])
-            })
+                'class': self.attribute_class(parts[1], parts[0]),
+                'is_association': is_association
+            }
+            self.entity_attributes.append(attributes)
 
             if parts[1] == 'belongs_to':
                 self.associations.append({

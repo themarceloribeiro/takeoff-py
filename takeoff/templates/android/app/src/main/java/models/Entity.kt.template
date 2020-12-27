@@ -3,11 +3,6 @@ package {{ generator.android_prefix }}.models
 import org.json.JSONObject
 import java.util.Date
 import {{ generator.android_prefix }}.models.helpers.DateTimeHelper
-{% for attribute in generator.entity_attributes -%}
-{% if attribute['type'] == 'belongs_to' %}
-import {{ generator.android_prefix }}.models.{{ attribute['class'] }}
-{% endif %}
-{% endfor %}
 
 open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
 
@@ -41,6 +36,8 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
         {% for attribute in generator.entity_attributes -%}
             {%- if attribute['class'] == 'Date' -%}
                 this.{{ attribute['name'] }} = dateHelper.readDate(jsonObject,"{{ attribute['name'] }}")
+            {%- elif attribute['is_association'] == True -%}
+                this.{{ attribute['name'] }} = {{ attribute['class'] }}(jsonObject.optJSONObject("{{ attribute['name'] }}"))
             {%- else -%}
                 this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['class'] }}("{{ attribute['name'] }}")
             {%- endif %}
@@ -55,6 +52,8 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
         {% for attribute in generator.entity_attributes -%}
             {%- if attribute['class'] == 'Date' -%}
                 dateHelper.putDate(json, "{{ attribute['name'] }}", {{ attribute['name'] }})
+            {%- elif attribute['is_association'] == True -%}
+                json.put("{{ attribute['name'] }}", {{ attribute['name'] }}?.toJson())
             {%- else -%}
                 json.put("{{ attribute['name'] }}", {{ attribute['name'] }})
             {%- endif %}

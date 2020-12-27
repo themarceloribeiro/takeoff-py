@@ -49,7 +49,15 @@ class ApiResourceGenerator(ApiBaseGenerator):
                 if f"= {field_type}" in line:
                     attribute_name = line.strip().split("=")[0].strip()
                     attribute_type = line.strip().split("=")[1].strip().split("(")[0].strip()
+
                     if attribute_type == 'models.ForeignKey':
+                        association_definition = {
+                            'attribute_name': attribute_name, 
+                            'attribute_type': attribute_type,
+                            'attribute_class': f"{self.camelize(attribute_name)}Serializer",
+                            'is_association': True
+                        }
+                        self.model_attributes.append(association_definition)
                         attribute_name = f"{attribute_name}_id"
                         attribute_type = "models.IntegerField"
                     attribute_definition = { 
