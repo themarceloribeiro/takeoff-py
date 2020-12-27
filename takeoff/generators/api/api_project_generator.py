@@ -6,7 +6,12 @@ from pathlib import Path
 class ApiProjectGenerator(ApiBaseGenerator):
     def __init__(self, name, options):
         self.django_admin = os.getenv('PYTHON_DJANGO_ADMIN', 'django-admin')
+        self.database_engine = 'sqlite'
         super().__init__(name, options)
+
+        for option in options:
+            if 'database' in option:
+                self.database_engine = option.split('=')[1]
 
     def run(self):
         print(f"Running API Project Generator: {self.name}")
@@ -14,8 +19,9 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.install_required_libraries()
         self.create_structure_folders()
         self.create_django_project()
+        self.prepare_database()
         self.prepare_settings()
-        self.create_main_view()        
+        self.create_main_view()
         self.prepare_urls()
         self.migrate()
         self.create_admin()
@@ -46,6 +52,21 @@ class ApiProjectGenerator(ApiBaseGenerator):
     def create_admin(self):
         self.system_call(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")
 
+    def prepare_database(self):
+        switcher = {
+            'sqlite': self.prepare_sqlite(),
+            'mysql': self.prepare_mysql(),
+        }
+        func = switcher.get(self.database_engine, lambda: "Invalid database engine")
+        func
+
+    def prepare_sqlite(self):
+        print('Nothing to do for SQLITE')
+
+    def prepare_mysql(self):
+        print('Preparing mysql db')
+        os.system(f"mysql -uroot -e \"create database {self.name}\"")
+
     def prepare_settings(self):
         self.add_app('api')
         self.add_app('rest_framework')
@@ -59,6 +80,28 @@ class ApiProjectGenerator(ApiBaseGenerator):
 
         destination = f"{self.base_dist_folder()}/{self.name}/api/{self.name}/{self.name}/settings.py"
         self.add_lines(destination, settings_lines)
+
+        if self.database_engine != 'sqlite':
+            settings = self.database_settings()
+            print(settings)
+            self.replace_lines_for_block(destination, 'DATABASES = {', '{', '}', settings)
+
+    def database_settings(self):
+        lines = {
+            "mysql": [
+                "    # mysql db",
+                "    'default': {",
+                "        'ENGINE': 'django.db.backends.mysql',",
+                f"        'NAME': '{self.name}',",
+                "        'USER': 'root',",
+                "        'PASSWORD': '',",
+                "        'HOST': 'localhost',",
+                "        'PORT': '3306',",
+                "    }",
+            ]
+        }
+
+        return ("\n").join(lines[self.database_engine])
 
     def generate_api_urls(self):
         template_path = f"{self.templates_path}/urls.template"

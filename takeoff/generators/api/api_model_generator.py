@@ -60,7 +60,8 @@ class ApiModelGenerator(ApiBaseGenerator):
             'text': 'TextField', 
             'integer': 'IntegerField',
             'float': 'FloatField',
-            'boolean': 'BooleanField',            
+            'boolean': 'BooleanField', 
+            'datetime': 'DateTimeField',                       
             'belongs_to': 'ForeignKey',
         }
         return switcher.get(type, 'CharField')
@@ -72,6 +73,7 @@ class ApiModelGenerator(ApiBaseGenerator):
             'float': 'default=0.0',
             'text': "default=''",
             'boolean': 'default=False',
+            'datetime': "null=True",
             'belongs_to': f"{association_class}, on_delete=models.CASCADE,  null=True"
         }   
         return switcher.get(type, "default='', max_length=250")

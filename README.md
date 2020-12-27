@@ -21,6 +21,10 @@ Start by creating a new project. You will be asked for django admin credentials.
 takeoff-generate web:project blog
 ```
 
+```
+takeoff-generate web:project blog database=mysql
+```
+
 ### Generate models
 
 For model generation:
