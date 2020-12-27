@@ -44,7 +44,6 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
                             'to_string_modifier': self.to_string_modifier(attribute_type),
                             'from_string_modifier': self.from_string_modifier(attribute_type)
                         }
-                        print(attribute_definition)
                         self.entity_attributes.append(attribute_definition)
 
     def to_string_modifier(self, attribute_type):

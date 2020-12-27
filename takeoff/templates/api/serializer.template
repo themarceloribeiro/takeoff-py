@@ -4,7 +4,7 @@ from ..models.{{ generator.model_name }} import {{ generator.camelize(generator.
 {%- if attribute['attribute_type'] == 'models.ForeignKey' %}
 from .{{ attribute['attribute_name'] }}_serializer import {{ generator.camelize(attribute['attribute_name']) }}Serializer
 {% endif -%}
-{%- endfor -%}
+{%- endfor %}
 from django.utils import timezone
 import datetime
 
@@ -27,7 +27,7 @@ class {{ generator.camelize(generator.model_name) }}Serializer(serializers.Seria
         return {{ generator.camelize(generator.model_name) }}.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        {%- for attribute in generator.writeable_attributes() -%}
+        {% for attribute in generator.writeable_attributes() -%}
         {%- if attribute['is_association'] != True -%}
         instance.{{- attribute['attribute_name']}} = validated_data.get('{{- attribute['attribute_name']}}', instance.{{- attribute['attribute_name']}})
         {%- endif %}
