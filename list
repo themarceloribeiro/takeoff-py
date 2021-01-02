@@ -1,0 +1,22 @@
+rm -rf dist/welcomehero/api
+./takeoff-generate api:project welcomehero
+./takeoff-generate api:authentication welcomehero
+./takeoff-generate api:model welcomehero property user_id:integer title summary:text address address2 city state zip country 
+./takeoff-generate api:model welcomehero reservation property:belongs_to guest_name starts_at:datetime ends_at:datetime total_cost:float
+./takeoff-generate api:model welcomehero task_group reservation:belongs_to user_id:integer title summary:text
+./takeoff-generate api:model welcomehero task task_group:belongs_to user_id:integer title summary:text finished_at:datetime finished_by_id:integer
+./takeoff-generate api:resource welcomehero property
+./takeoff-generate api:resource welcomehero reservation
+./takeoff-generate api:resource welcomehero task_group
+./takeoff-generate api:resource welcomehero task
+rm -rf dist/welcomehero/android
+./takeoff-generate android:project welcomehero
+./takeoff-generate android:authentication welcomehero facebook_auth=true facebook_app_id=379361159938853 facebook_scheme=fb379361159938853
+./takeoff-generate android:entity welcomehero property user_id:integer title summary:text address address2 city state zip country 
+./takeoff-generate android:entity welcomehero reservation property:belongs_to guest_name starts_at:datetime ends_at:datetime total_cost:float
+./takeoff-generate android:entity welcomehero task_group reservation:belongs_to user_id:integer title summary:text
+./takeoff-generate android:entity welcomehero task task_group:belongs_to user_id:integer title summary:text finished_at:datetime finished_by_id:integer
+./takeoff-generate android:resource welcomehero property
+./takeoff-generate android:resource welcomehero reservation
+./takeoff-generate android:resource welcomehero task_group
+./takeoff-generate android:resource welcomehero task

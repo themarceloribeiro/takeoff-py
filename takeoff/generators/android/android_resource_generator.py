@@ -22,7 +22,7 @@ class AndroidResourceGenerator(AndroidBaseGenerator):
         self.add_dashboard_access()
     
     def load_resource_attributes(self):
-        entity_file = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{self.entity_name}.kt"
+        entity_file = f"{self.project_folder()}/app/src/main/java/{self.android_prefix.replace('.', '/')}/models/{self.camelize(self.entity_name)}.kt"
         lines = list(open(entity_file, 'r'))
 
         android_entity_attribute_types = [
