@@ -6,6 +6,7 @@ from .image_builder import ImageBuilder
 from .label_builder import LabelBuilder
 from .text_field_builder import TextFieldBuilder
 from .button_builder import ButtonBuilder
+from .facebook_button_builder import FacebookButtonBuilder
 
 class ScreenBuilder(AndroidComponentBuilder):
     def build(self):
