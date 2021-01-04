@@ -9,6 +9,16 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
     def run(self):
         self.setup()
         print(f">>> Running Android Project Generator: {self.name}")
+        self.theme_primary_color = "#fa0055"
+        self.theme_primary_color_variant = "#ff4f8c"
+        self.theme_secondary_color = "#04da97"
+        self.theme_secondary_color_variant = "#47dad1"
+        self.theme_status_bar_color = "#ffffff"
+        self.dark_theme_primary_color = "#fa0055"
+        self.dark_theme_primary_color_variant = "#ff4f8c"
+        self.dark_theme_secondary_color = "#04da97"
+        self.dark_theme_secondary_color_variant = "#47dad1"
+        self.dark_theme_status_bar_color = "#000000"
         self.create_structure_folders()
         self.create_structure_files()
 
@@ -77,8 +87,9 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/java/home/DashboardFragment.kt': f"app/src/main/java/{package_path}/home/DashboardFragment.kt",
             'app/src/main/java/list_adapters/DashboardListAdapter.kt': f"app/src/main/java/{package_path}/list_adapters/DashboardListAdapter.kt",
             'app/src/main/res/values/themes.xml': 'app/src/main/res/values/themes.xml',
-            'app/src/main/res/values/strings.xml': 'app/src/main/res/values/strings.xml',
             'app/src/main/res/values-night/themes.xml': 'app/src/main/res/values-night/themes.xml',
+            'app/src/main/res/values/colors.xml': 'app/src/main/res/values/colors.xml',            
+            'app/src/main/res/values/strings.xml': 'app/src/main/res/values/strings.xml',
             'app/src/main/res/layout/home_activity.xml': 'app/src/main/res/layout/home_activity.xml',
             'app/src/main/res/menu/nav_items.xml': 'app/src/main/res/menu/nav_items.xml',
             'app/src/main/res/drawable/menu_item.xml': 'app/src/main/res/drawable/home_item.xml',
@@ -125,7 +136,6 @@ class AndroidProjectGenerator(AndroidBaseGenerator):
             'app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png': 'app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png',
             'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png': 'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png',
             'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png': 'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png',
-            'app/src/main/res/values/colors.xml': 'app/src/main/res/values/colors.xml',
             'app/src/main/res/layout/dashboard_fragment.xml': 'app/src/main/res/layout/dashboard_fragment.xml',
             'app/src/main/res/layout/string_list_item.xml': 'app/src/main/res/layout/string_list_item.xml',
             'build.gradle': 'build.gradle',

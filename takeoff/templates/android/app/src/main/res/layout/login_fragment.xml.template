@@ -48,7 +48,7 @@
         android:textSize="14dp"
         android:text="@string/forgot"
         android:textAllCaps="true"
-        android:textColor="#43BCCD"
+        android:textColor="@color/theme_secondary_color"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

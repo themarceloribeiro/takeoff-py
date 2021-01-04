@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- StartColors -->
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="error">#ffab281c</color>
+    <color name="success">#ff09af32</color>    
+    <color name="theme_primary_color">#ff{{ generator.theme_primary_color.replace('#', '') }}</color>
+    <color name="theme_primary_color_variant">#ff{{ generator.theme_primary_color_variant.replace('#', '') }}</color>
+    <color name="theme_secondary_color">#ff{{ generator.theme_secondary_color.replace('#', '') }}</color>
+    <color name="theme_secondary_color_variant">#ff{{ generator.theme_secondary_color_variant.replace('#', '') }}</color>
+    <color name="theme_status_bar_color">#ff{{ generator.theme_status_bar_color.replace('#', '') }}</color>
+    <color name="dark_theme_primary_color">#ff{{ generator.dark_theme_primary_color.replace('#', '') }}</color>
+    <color name="dark_theme_primary_color_variant">#ff{{ generator.dark_theme_primary_color_variant.replace('#', '') }}</color>
+    <color name="dark_theme_secondary_color">#ff{{ generator.dark_theme_secondary_color.replace('#', '') }}</color>
+    <color name="dark_theme_secondary_color_variant">#ff{{ generator.dark_theme_secondary_color_variant.replace('#', '') }}</color>
+    <color name="dark_theme_status_bar_color">#ff{{ generator.dark_theme_status_bar_color.replace('#', '') }}</color>
+    <!-- FinishColors -->
+</resources>

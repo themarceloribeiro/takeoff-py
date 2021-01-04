@@ -19,7 +19,7 @@
         android:id="@+id/add{{ generator.camelize(generator.entity_name) }}Button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/purple_500"
+        android:background="@color/theme_primary_color"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginRight="20dp"

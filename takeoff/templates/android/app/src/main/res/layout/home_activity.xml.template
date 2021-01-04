@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:mk_type="FishSpinner"
-        app:mk_color="@color/purple_200"
+        app:mk_color="@color/theme_primary_color_variant"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="0dp"
         app:layout_constraintTop_toTopOf="parent"
