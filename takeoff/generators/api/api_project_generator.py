@@ -7,6 +7,8 @@ class ApiProjectGenerator(ApiBaseGenerator):
     def __init__(self, name, options):
         self.django_admin = os.getenv('PYTHON_DJANGO_ADMIN', 'django-admin')
         self.database_engine = 'sqlite'
+        self.email = 'admin@example.com'
+        self.password = 'admin'
         super().__init__(name, options)
 
         for option in options:
@@ -50,7 +52,8 @@ class ApiProjectGenerator(ApiBaseGenerator):
         self.system_call(f"mkdir -p {fullpath}")
 
     def create_admin(self):
-        self.system_call(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")
+        os.system(f"echo \"from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('{self.email}', '{self.email}', '{self.password}')\" | python3 dist/{self.name}/api/welcomehero/manage.py shell")
+        # self.system_call(f"cd {self.project_folder()} && {self.python} manage.py createsuperuser")
 
     def prepare_database(self):
         switcher = {

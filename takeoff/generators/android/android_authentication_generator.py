@@ -22,7 +22,7 @@ class AndroidAuthenticationGenerator(AndroidBaseGenerator):
         self.add_login_strings()
 
         for option in self.options:
-            if 'facebook_auth' in option and option.split('=')[1] == 'true':
+            if 'facebook_auth' in option and option.split('=')[1].lower() == 'true':
                 self.facebook_auth = True
             if 'facebook_app_id' in option:
                 self.facebook_app_id = option.split('=')[1]

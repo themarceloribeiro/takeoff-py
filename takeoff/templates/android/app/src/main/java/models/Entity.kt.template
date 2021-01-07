@@ -37,9 +37,11 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
             {%- if attribute['class'] == 'Date' -%}
                 this.{{ attribute['name'] }} = dateHelper.readDate(jsonObject,"{{ attribute['name'] }}")
             {%- elif attribute['is_association'] == True -%}
-                this.{{ attribute['name'] }} = {{ attribute['class'] }}(jsonObject.optJSONObject("{{ attribute['name'] }}"))
+        if (jsonObject.optJSONObject("{{ attribute['name'] }}") != null) {
+            this.{{ attribute['name'] }} = {{ attribute['class'] }}(jsonObject.optJSONObject("{{ attribute['name'] }}"))
+        }
             {%- else -%}
-                this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['class'] }}("{{ attribute['name'] }}")
+                this.{{ attribute['name'] }} = jsonObject.opt{{ attribute['json_opt_class'] }}("{{ attribute['name'] }}"){{ attribute['json_opt_suffix'] }}
             {%- endif %}
         {% endfor %}
         // EndFromJson - Do not remove
@@ -61,5 +63,9 @@ open class {{ generator.camelize(generator.entity_name) }} : RestEntity {
         // EndToJson - Do not remove
 
         return json
+    }
+
+    fun description(): String {
+        return "{{ generator.camelize(generator.entity_name) }}: ${this.remote_id.toString()}"
     }
 }

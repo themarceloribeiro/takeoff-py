@@ -22,7 +22,7 @@ class {{ generator.camelize(generator.entity_name) }}ListAdapter(context: Contex
         }
         val textView = actualView!!.findViewById<TextView>(R.id.{{ generator.entity_name.lower() }}_list_item_title) as TextView
         var {{ generator.entity_name.lower() }} = objects[position] as {{ generator.camelize(generator.entity_name) }}
-        textView.text = {{ generator.entity_name.lower() }}.title
+        textView.text = {{ generator.entity_name.lower() }}.description()
 
         var button = actualView!!.findViewById<ImageButton>(R.id.menuButton)
         button.setOnClickListener { fragment?.presentMenuForPosition(button, position) }

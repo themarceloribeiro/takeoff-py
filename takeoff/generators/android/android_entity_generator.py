@@ -29,11 +29,14 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             is_association = False
             if parts[1] == 'belongs_to':
                 is_association = True
-            
+            klass = self.attribute_class(parts[1], parts[0])
+
             attributes = {
                 'name': parts[0], 
                 'type': parts[1], 
-                'class': self.attribute_class(parts[1], parts[0]),
+                'class': klass,
+                'json_opt_class': self.json_opt_class(klass),
+                'json_opt_suffix': self.json_opt_suffix(klass),
                 'is_association': is_association
             }
             self.entity_attributes.append(attributes)
@@ -68,6 +71,18 @@ class AndroidEntityGenerator(AndroidBaseGenerator):
             'belongs_to': self.camelize(attribute_name)
         }
         return switcher.get(type, 'String')
+    
+    def json_opt_class(self, klass):
+        if (klass == 'Float'):
+            return 'Double'
+
+        return klass
+    
+    def json_opt_suffix(self, klass):
+        if (klass == 'Float'):
+            return '.toFloat()'
+        
+        return ''
 
     def write_entity_file(self):
         package_path = self.android_prefix.replace('.', '/')
